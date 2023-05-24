@@ -28,6 +28,7 @@ def ssim(img, imclean):
     Iclean = imclean.permute(0, 2, 3, 1).data.cpu().numpy().astype(np.float32)
     SSIM = []
     for i in range(Img.shape[0]):
+        print("ssim:", Iclean[i,:,:,:].shape, Img[i,:,:,:].shape)
         ss = compare_ssim(Iclean[i,:,:,:], Img[i,:,:,:], multichannel =True)
         SSIM.append(ss)
     return sum(SSIM)/len(SSIM)

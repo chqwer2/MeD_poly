@@ -120,9 +120,13 @@ class Test(BaseTrainer):
                     if met.__name__=="psnr":
                        psnr = met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device),
                                   torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1))
+
                        self.test_metrics.update('psnr', psnr)
                     elif met.__name__=="ssim":
-                       self.test_metrics.update('ssim', met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device), torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1)))
+                       self.test_metrics.update('ssim',
+                            met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device),
+                                torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1)))
+
                 self.writer.close()
               
                 del target
