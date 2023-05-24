@@ -3,10 +3,10 @@ import numpy as np
 import math
 # from skimage.measure.simple_metrics import compare_psnr
 # from skimage.measure  import compare_ssim
-#
+
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 from skimage.metrics import structural_similarity as compare_ssim
-    
+
 def psnr(img, imclean):
     img = img.mul(255).clamp(0, 255).round().div(255)
     imclean = imclean.mul(255).clamp(0, 255).round().div(255)
@@ -31,7 +31,9 @@ def ssim(img, imclean):
     for i in range(Img.shape[0]):
 
         print("ssim:", Iclean[i,:,:,:].transpose(2, 0, 1).shape, Img[i,:,:,:].shape)  # (256, 256, 3)
+
         ss = compare_ssim(Iclean[i,:,:,:],
-                          Img[i,:,:,:], data_range=1., multichannel =True)
+                          Img[i,:,:,:], data_range=1., multichannel=True, channel_axis=2)
         SSIM.append(ss)
+
     return sum(SSIM)/len(SSIM)
