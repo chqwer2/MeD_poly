@@ -14,7 +14,7 @@ def psnr(img, imclean):
     Iclean = imclean.data.cpu().numpy().astype(np.float32)
     PSNR = []
     for i in range(Img.shape[0]):
-        ps = compare_psnr(Iclean[i,:,:,:], Img[i,:,:,:], data_range=1.0)
+        ps = compare_psnr(Iclean[i,:,:,:], Img[i,:,:,:], data_range=1.)
         if np.isinf(ps):
             continue
         PSNR.append(ps)
@@ -31,6 +31,7 @@ def ssim(img, imclean):
     for i in range(Img.shape[0]):
 
         print("ssim:", Iclean[i,:,:,:].transpose(2, 0, 1).shape, Img[i,:,:,:].shape)  # (256, 256, 3)
-        ss = compare_ssim(Iclean[i,:,:,:].transpose(2, 0, 1), Img[i,:,:,:].transpose(2, 0, 1), multichannel =True)
+        ss = compare_ssim(Iclean[i,:,:,:],
+                          Img[i,:,:,:], data_range=1., multichannel =True)
         SSIM.append(ss)
     return sum(SSIM)/len(SSIM)
