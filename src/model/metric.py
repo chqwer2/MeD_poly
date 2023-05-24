@@ -1,10 +1,11 @@
 import torch
 import numpy as np
 import math
-from skimage.measure.simple_metrics import compare_psnr
-from skimage.measure  import compare_ssim
-    
-    
+# from skimage.measure.simple_metrics import compare_psnr
+# from skimage.measure  import compare_ssim
+#
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr
+from skimage.metrics import structural_similarity as compare_ssim
     
 def psnr(img, imclean):
     img = img.mul(255).clamp(0, 255).round().div(255)
