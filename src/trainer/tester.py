@@ -85,9 +85,9 @@ class Test(BaseTrainer):
 
         #with torch.no_grad():   
         if save==True:
-           os.makedirs('../output/C/'+str(epoch))
-           os.makedirs('../output/N_d/'+str(epoch))
-           os.makedirs('../output/N_i/'+str(epoch))
+           os.makedirs('../output/C/'+str(epoch), exist_ok=True)
+           os.makedirs('../output/N_d/'+str(epoch), exist_ok=True)
+           os.makedirs('../output/N_i/'+str(epoch), exist_ok=True)
         for batch_idx, (target, input_noisy, input_GT, std) in enumerate(self.test_data_loader):
                 input_noisy = input_noisy.to(self.device)
                 input_GT = input_GT.to(self.device)
