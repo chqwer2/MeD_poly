@@ -112,9 +112,14 @@ class Test(BaseTrainer):
 
                 
                 self.writer.set_step((epoch - 1) * len(self.test_data_loader) + batch_idx, 'test')
+
+                print("input_GT:", input_GT.shape, clean.shape)
+                print("pad:", pad)
+
                 for met in self.metric_ftns:
                     if met.__name__=="psnr":
-                       psnr = met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device), torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1))
+                       psnr = met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device),
+                                  torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1))
                        self.test_metrics.update('psnr', psnr)
                     elif met.__name__=="ssim":
                        self.test_metrics.update('ssim', met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device), torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1)))
