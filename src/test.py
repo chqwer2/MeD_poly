@@ -21,6 +21,10 @@ def main(config):
     logger = config.get_logger('train')
 
     # setup data_loader instances
+    # How ....
+    # PolyU
+    print("module_data: ", module_data)
+
     test_data_loader = config.init_obj('test_data_loader', module_data)
 
 
