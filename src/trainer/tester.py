@@ -132,7 +132,7 @@ class Test(BaseTrainer):
                     m = '../output/C/' + str(epoch) + '/' + str(std[i].numpy()) + '_diff.PNG'
                     save_image(torch.clamp( output[i],min=0,max=1).detach().cpu(),
                                n)
-                    save_image( input_GT[i] - torch.clamp(output[i], min=0, max=1).detach().cpu(),
+                    save_image( input_GT[i].cpu() - torch.clamp(output[i], min=0, max=1).detach().cpu(),
                                m)
 
 
