@@ -80,7 +80,7 @@ class PolyU(Dataset):
         img_H, img_L = self.get_img_by_index(data_idx)
 
 
-        print("img_H:", img_H.shape)
+        # print("img_H:", img_H.shape)
         return np.array(img_L, dtype=np.float32), \
             np.array(img_H, dtype=np.float32),  0, idx
 

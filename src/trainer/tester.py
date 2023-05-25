@@ -91,12 +91,14 @@ class Test(BaseTrainer):
            os.makedirs('../output/C/'+str(epoch), exist_ok=True)
            os.makedirs('../output/N_d/'+str(epoch), exist_ok=True)
            os.makedirs('../output/N_i/'+str(epoch), exist_ok=True)
+
         for batch_idx, (target, input_noisy, input_GT, std) in enumerate(self.test_data_loader):
+
                 input_noisy = input_noisy.to(self.device)
                 input_GT = input_GT.to(self.device)
                 pad = 20
-                input_noisy = padr(input_noisy)
-                input_GT = padr(input_GT)
+                # input_noisy = padr(input_noisy)
+                # input_GT = padr(input_GT)
 
 
                 noise_w, noise_b, clean = self.model(input_noisy)
