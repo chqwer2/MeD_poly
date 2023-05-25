@@ -120,47 +120,32 @@ def test():
     else:
         file_manager = FileManager(output_folder)
 
-        test_dataset = PolyU()
 
-        # if test_cfg['dataset'] == 'SIDD_benchmark':
-        #     test_args = test_cfg['dataset_args']
-        #     dataset_path = os.path.join(cfg['data_root_dir'], 'SIDD')
-        #     test_dataset = SIDD_benchmark(**test_args, dataset_path=dataset_path)
-        #
-        # elif test_cfg['dataset'] == 'SIDD_val':
-        #     test_args = test_cfg['dataset_args']
-        #     dataset_path = os.path.join(cfg['data_root_dir'], 'SIDD')
-        #     test_dataset = SIDD_val(**test_args, dataset_path=dataset_path)
-        #
-        #
-        #
-        # else:
-        #     test_args = test_cfg['dataset_args']
-        #     dataset_path = os.path.join(cfg['data_root_dir'], test_cfg['dataset'])
-        #     test_dataset = preped_RN_data(**test_args, dataset_path=dataset_path)
+
+    test_dataset = PolyU()
 
 
 
-        dataloader = {}
-        dataloader['dataset'] = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=cfg['thread'],
-                                           pin_memory=False)
-        test_dataloader = dataloader
+    dataloader = {}
+    dataloader['dataset'] = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=cfg['thread'],
+                                       pin_memory=False)
+    test_dataloader = dataloader
 
-        psnr, ssim = test_dataloader_process(   denoiser=denoiser,
-                                                file_manager=file_manager,
-                                                cfg=cfg,
-                                                dataloader    = test_dataloader['dataset'],
-                                                add_con       = 0.  if not 'add_con' in test_cfg else test_cfg['add_con'],
-                                                floor         = False if not 'floor' in test_cfg else test_cfg['floor'],
-                                                img_save_path = img_save_path,
-                                                img_save      = test_cfg['save_image'],
-                                                logger=logger,
-                                                status=status)
+    psnr, ssim = test_dataloader_process(   denoiser=denoiser,
+                                            file_manager=file_manager,
+                                            cfg=cfg,
+                                            dataloader    = test_dataloader['dataset'],
+                                            add_con       = 0.  if not 'add_con' in test_cfg else test_cfg['add_con'],
+                                            floor         = False if not 'floor' in test_cfg else test_cfg['floor'],
+                                            img_save_path = img_save_path,
+                                            img_save      = test_cfg['save_image'],
+                                            logger=logger,
+                                            status=status)
 
-        # print out result as filename
-        if psnr is not None and ssim is not None:
-            with open(os.path.join(file_manager.get_dir(img_save_path), '_psnr-%.2f_ssim-%.3f.result'%(psnr, ssim)), 'w') as f:
-                f.write('PSNR: %f\nSSIM: %f'%(psnr, ssim))
+    # print out result as filename
+    if psnr is not None and ssim is not None:
+        with open(os.path.join(file_manager.get_dir(img_save_path), '_psnr-%.2f_ssim-%.3f.result'%(psnr, ssim)), 'w') as f:
+            f.write('PSNR: %f\nSSIM: %f'%(psnr, ssim))
 
 
 if __name__ == '__main__':
