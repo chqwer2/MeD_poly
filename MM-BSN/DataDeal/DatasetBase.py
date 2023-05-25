@@ -153,7 +153,7 @@ class RealDataSet(Dataset):
         {'clean', 'syn_noisy', 'real_noisy', 'noisy (any of real[first priority] and syn)', etc}
         '''
         # calculate data index
-        data_idx = idx % self.n_data
+        data_idx = idx #% self.n_data
 
         # load data
         data = self._load_data(data_idx)
