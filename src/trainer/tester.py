@@ -19,7 +19,10 @@ def sgd(weight: torch.Tensor, grad: torch.Tensor, meta_lr) -> torch.Tensor:
 def padr(img):
     pad = 20
     pad_mod = 'reflect'
+
+    print(" pad img:", img.shape )
     img_pad = F.pad(input=img, pad=(pad,pad,pad,pad), mode=pad_mod)
+
     return img_pad
     
 def padr_crop(img):
