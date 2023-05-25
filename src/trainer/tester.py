@@ -19,8 +19,6 @@ def sgd(weight: torch.Tensor, grad: torch.Tensor, meta_lr) -> torch.Tensor:
 def padr(img):
     pad = 20
     pad_mod = 'reflect'
-
-    print(" pad img:", img.shape )
     img_pad = F.pad(input=img, pad=(pad,pad,pad,pad), mode=pad_mod)
 
     return img_pad
@@ -139,7 +137,7 @@ class Test(BaseTrainer):
                 
                 self.writer.set_step((epoch - 1) * len(self.test_data_loader) + batch_idx, 'test')
 
-                print("input_GT:", input_GT.shape, output.shape)
+                # print("input_GT:", input_GT.shape, output.shape)
 
 
                 for met in self.metric_ftns:
