@@ -139,7 +139,7 @@ class Test(BaseTrainer):
                 
                 self.writer.set_step((epoch - 1) * len(self.test_data_loader) + batch_idx, 'test')
 
-                print("input_GT:", input_GT.shape, clean.shape)
+                print("input_GT:", input_GT.shape, output.shape)
 
 
                 for met in self.metric_ftns:

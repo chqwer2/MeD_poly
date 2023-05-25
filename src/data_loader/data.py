@@ -90,8 +90,8 @@ class PolyU(Dataset):
 
 
         # print("img_H:", img_H.shape)
-        return np.array(img_L, dtype=np.float32), \
-            np.array(img_H, dtype=np.float32),  0, idx
+        return 0, \
+            np.array(img_L, dtype=np.float32),  np.array(img_H, dtype=np.float32), idx
 
 
 
