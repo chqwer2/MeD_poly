@@ -46,8 +46,27 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
 
         # forward
         input_data = [data[arg] for arg in cfg['model_input']]
-        with torch.no_grad():
-            denoised_image = denoiser(*input_data)
+
+        print("input_data:", input_data[0].shape)
+
+        (B, C, W, H) = input_data[0].shape
+        output = torch.zeros_like(input_data[0]).to('cuda')
+        W_st = W // 256 + 1
+        H_st = H // 256 + 1
+
+
+        for i in range(W_st):
+            for j in range(H_st):
+                input = input_data[0][:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
+
+                with torch.no_grad():
+                    clean = denoiser(*[input])
+
+                output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
+                    clean#[:, :, pad:-pad, pad:-pad]
+
+
+        denoised_image = output
         # print(denoised_image.shape)
 
         # add constant and floor (if floor is on)
