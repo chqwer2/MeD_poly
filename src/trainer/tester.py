@@ -100,6 +100,7 @@ class Test(BaseTrainer):
                 # input_noisy = padr(input_noisy)
                 # input_GT = padr(input_GT)
 
+                print("input_noisy before model:", input_noisy.shape)
 
                 noise_w, noise_b, clean = self.model(input_noisy)
 
