@@ -46,7 +46,8 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
 
         # forward
         input_data = [data[arg] for arg in cfg['model_input']]
-        denoised_image = denoiser(*input_data)
+        with torch.no_grad():
+            denoised_image = denoiser(*input_data)
         # print(denoised_image.shape)
 
         # add constant and floor (if floor is on)
