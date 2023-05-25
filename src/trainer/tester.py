@@ -110,20 +110,21 @@ class Test(BaseTrainer):
 
 
                         input = padr(input_noisy[:, :, i*256:(i+1)*256, j*256:(j+1)*256])
-                        # input = padr(input)
 
 
                         with torch.no_grad():
                             noise_w, noise_b, clean = self.model(input)
 
-                            output[:, :, i*256:(i+1)*256, j*256:(j+1)*256] = \
-                                clean[:, :, pad:-pad, pad:-pad]
+                        output[:, :, i*256:(i+1)*256, j*256:(j+1)*256] = \
+                            clean[:, :, pad:-pad, pad:-pad]
 
 
                 size = [noise_b.shape[0],noise_b.shape[1],noise_b.shape[2]*noise_b.shape[3]]              
                 noise_b_normal = (noise_b-torch.min(noise_b.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))/(torch.max(noise_b.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)-torch.min(noise_b.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))    
-                noise_w_normal = (noise_w-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))/(torch.max(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)) 
 
+                noise_w_normal = (noise_w-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))/(torch.max(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))
+
+                print("input_GT:", input_GT.shape, output.shape)
 
                 # if save==True:
                 for i in range(input_noisy.shape[0]):
@@ -140,7 +141,7 @@ class Test(BaseTrainer):
                 
                 self.writer.set_step((epoch - 1) * len(self.test_data_loader) + batch_idx, 'test')
 
-                # print("input_GT:", input_GT.shape, output.shape)
+
 
 
                 for met in self.metric_ftns:
