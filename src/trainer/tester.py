@@ -95,7 +95,7 @@ class Test(BaseTrainer):
         for batch_idx, (target, input_noisy, input_GT, std) in enumerate(self.test_data_loader):
 
                 unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
-                input_noisy_patch = unfold(input_noisy)
+                input_noisy_patch = unfold(input_noisy[0])
                 print("input_noisy_patch:", input_noisy_patch.shape)
 
 
