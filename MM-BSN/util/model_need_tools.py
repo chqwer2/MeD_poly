@@ -73,6 +73,7 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
         denoised_image += add_con
         if floor: denoised_image = torch.floor(denoised_image)
 
+
         # evaluation
         if 'clean' in data:
             psnr_value = psnr(denoised_image, data['clean'])

@@ -48,7 +48,7 @@ def ssim(img1, img2):
     img2 = np.clip(img2, 0, 255)
     img1 = np.clip(img1, 0, 255)
 
-    return structural_similarity(img1, img2, multichannel=True, data_range=255)
+    return structural_similarity(img1, img2, multichannel=True, data_range=255, channel_axis=-1)
 
 def np2tensor(n:np.array):
     '''
