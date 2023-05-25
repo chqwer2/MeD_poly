@@ -137,6 +137,7 @@ class PolyU(RealDataSet):
         super().__init__(*args, **kwargs)
 
     def _scan(self):
+        self.dataset_path = "../../../../data/denoising/PolyU"
         self.paths_L = glob("../../../../data/denoising/PolyU/gt/*")
         self.paths_H = glob("../../../../data/denoising/PolyU/noisy/*")
         self.paths_H.sort()
