@@ -126,8 +126,11 @@ class Test(BaseTrainer):
 
 
                 # if save==True:
-                #     for i in range(input_noisy.shape[0]):
-                #         save_image(torch.clamp(clean[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/C/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
+                for i in range(input_noisy.shape[0]):
+                    save_image(torch.clamp(output[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(),
+                               '../output/C/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
+
+
                 #         save_image(torch.clamp(input_GT[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/GT/' +target['dir_idx'][i]+'.PNG')
                 #         save_image(torch.clamp(noise_b_normal[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/N_i/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
                 #         save_image(torch.clamp(noise_w_normal[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/N_d/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
