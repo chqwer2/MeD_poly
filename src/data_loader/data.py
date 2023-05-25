@@ -59,9 +59,11 @@ class PolyU(Dataset):
         img_H = np.asarray(img_H)
         img_L = np.asarray(img_L)
 
-        if np.max(img_H) < 1.1:
-            img_H = img_H * 255
-            img_L = img_L * 255
+        # (np.transpose(Img_noisy, (2, 0, 1)) / 255)
+
+        if np.max(img_H) > 1.1:
+            img_H = img_H / 255
+            img_L = img_L / 255
 
         return img_H, img_L
 
@@ -77,9 +79,10 @@ class PolyU(Dataset):
         # load data
         img_H, img_L = self.get_img_by_index(data_idx)
 
-        return 0, img_L, img_H, 0
 
 
+        return np.array(img_L, dtype=np.float32), \
+            np.array(imgH, dtype=np.float32),  0, idx
 
 
 

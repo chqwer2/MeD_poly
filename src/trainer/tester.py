@@ -78,7 +78,7 @@ class Test(BaseTrainer):
 
         return log
 
-    def _test_epoch(self, epoch,save=False):
+    def _test_epoch(self, epoch, save=False):
 
 
         self.test_metrics.reset()
