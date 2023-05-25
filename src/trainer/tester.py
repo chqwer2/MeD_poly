@@ -152,9 +152,11 @@ class Test(BaseTrainer):
 
                        self.test_metrics.update('psnr', psnr)
                     elif met.__name__=="ssim":
-                       self.test_metrics.update('ssim',
-                            met(input_GT.to(self.device),
-                                  torch.clamp(output, min=0, max=1),min=0,max=1))
+                        ssim = met(input_GT.to(self.device),
+                                  torch.clamp(output, min=0, max=1))
+                        print("ssim:", ssim)
+                       self.test_metrics.update('ssim', ssim
+                            )
 
                 self.writer.close()
               
