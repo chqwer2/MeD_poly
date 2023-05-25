@@ -122,8 +122,8 @@ class RealDataSet(Dataset):
             ratio_data (float)  : ratio of data to be used. (activated when n_data=None, default: None = all data)
         '''
         self.dataset_path = dataset_path
-        if not os.path.isdir(self.dataset_path):
-            raise Exception('dataset directory is not exist')
+        # if not os.path.isdir(self.dataset_path):
+        #     raise Exception('dataset directory is not exist')
         # set parameters for dataset.
         self.crop_size = crop_size
         self.aug = aug
