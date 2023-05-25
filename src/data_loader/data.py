@@ -82,7 +82,7 @@ class PolyU(Dataset):
 
 
         return np.array(img_L, dtype=np.float32), \
-            np.array(imgH, dtype=np.float32),  0, idx
+            np.array(img_H, dtype=np.float32),  0, idx
 
 
 
