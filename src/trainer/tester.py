@@ -97,8 +97,8 @@ class Test(BaseTrainer):
                 input_noisy = input_noisy.to(self.device)
                 input_GT = input_GT.to(self.device)
                 pad = 20
-                # input_noisy = padr(input_noisy)
-                # input_GT = padr(input_GT)
+                input_noisy = padr(input_noisy)
+                input_GT = padr(input_GT)
 
                 print("input_noisy before model:", input_noisy.shape)
 
