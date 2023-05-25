@@ -47,7 +47,7 @@ class PolyU(Dataset):
         # *255
 
     def __len__(self):
-        return len(self.noisypath)
+        return len(self.paths_H)
 
     def get_img_by_index(self, index):
         H_path = self.paths_H[index]
