@@ -161,9 +161,9 @@ class PolyU(RealDataSet):
 
         # (npImg_noisy, (2, 0, 1)) / 255)
 
-        if np.max(img_H) > 1.1:
-            img_H = img_H / 255
-            img_L = img_L / 255
+        # if np.max(img_H) > 1.1:
+        #     img_H = img_H / 255
+        #     img_L = img_L / 255
 
         return img_H, img_L
 
