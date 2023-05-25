@@ -80,7 +80,7 @@ class PolyU(Dataset):
         img_H, img_L = self.get_img_by_index(data_idx)
 
 
-
+        print("img_H:", img_H.shape)
         return np.array(img_L, dtype=np.float32), \
             np.array(img_H, dtype=np.float32),  0, idx
 
@@ -130,7 +130,7 @@ class benchmark_data(Dataset):
             if self.task=="test": 
                Img_noisy = self.Validation_Noisy[index]
                Img_GT = self.Validation_Gt[index]
-               Img_noisy = (np.transpose(Img_noisy,(2, 0, 1))/255)
+               Img_noisy = (np.transpose(Img_noisy,(2, 0, 1))/255)  # 3,256,256
                Img_GT = (np.transpose(Img_GT,(2, 0, 1))/255)   
                std = self.std[index]
 
