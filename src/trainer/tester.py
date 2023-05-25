@@ -117,7 +117,9 @@ class Test(BaseTrainer):
                         print("input_noisy before model:", input.shape)
 
                         noise_w, noise_b, clean = self.model(input)
-                        output[:, :, i*256:(i+1)*256, j*256:(j+1)*256] = input_noisy[:, :, pad:-pad, pad:-pad]
+
+                        output[:, :, i*256:(i+1)*256, j*256:(j+1)*256] = \
+                            clean[:, :, pad:-pad, pad:-pad]
 
 
                 size = [noise_b.shape[0],noise_b.shape[1],noise_b.shape[2]*noise_b.shape[3]]              
@@ -138,7 +140,7 @@ class Test(BaseTrainer):
                 self.writer.set_step((epoch - 1) * len(self.test_data_loader) + batch_idx, 'test')
 
                 print("input_GT:", input_GT.shape, clean.shape)
-                print("pad:", pad)
+
 
                 for met in self.metric_ftns:
                     if met.__name__=="psnr":
