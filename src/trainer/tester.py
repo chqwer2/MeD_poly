@@ -112,9 +112,9 @@ class Test(BaseTrainer):
 
 
                         input = padr(input_noisy[:, :, i*256:(i+1)*256, j*256:(j+1)*256])
-                        input = padr(input)
+                        # input = padr(input)
 
-                        print("input_noisy before model:", input.shape)
+
 
                         noise_w, noise_b, clean = self.model(input)
 
