@@ -43,7 +43,7 @@ class PolyU(Dataset):
         self.paths_H = glob("../../../../data/denoising/PolyU/noisy/*")
         self.paths_H.sort()
         self.paths_L.sort()
-
+        self.unfold = torch.nn.Unfold(kernel_size=256, padding=0, stride=256)
         # *255
 
     def __len__(self):
@@ -78,6 +78,15 @@ class PolyU(Dataset):
 
         # load data
         img_H, img_L = self.get_img_by_index(data_idx)
+
+
+
+        size = 256    # patch size
+        stride = 256  # patch stride
+
+        patches = self.unfold(img_L)  #img_L.unfold(1, size, stride).unfold(2, size, stride).unfold(3, size, stride)
+        print(patches.shape)
+
 
 
         # print("img_H:", img_H.shape)
