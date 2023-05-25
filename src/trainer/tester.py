@@ -99,7 +99,7 @@ class Test(BaseTrainer):
 
                 size = 256  # patch size
                 stride = 256  # patch stride
-                patches = input_noisy.unfold(1, size, stride).unfold(2, size, stride).unfold(3, size, stride)
+                patches = input_noisy.unfold(2, size, stride).unfold(3, size, stride)
                 print("input_noisy_patch:", input_noisy.shape, patches.shape)
 
 
