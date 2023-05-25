@@ -128,8 +128,9 @@ class Test(BaseTrainer):
 
                 # if save==True:
                 for i in range(input_noisy.shape[0]):
-                    save_image(torch.clamp(output[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(),
-                               '../output/C/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
+                    n = '../output/C/'+str(epoch)+'/'+std[i]+'.PNG'
+                    save_image(torch.clamp(output[i],min=0,max=1).detach().cpu(),
+                               n)
 
 
                 #         save_image(torch.clamp(input_GT[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/GT/' +target['dir_idx'][i]+'.PNG')
