@@ -95,8 +95,12 @@ class Test(BaseTrainer):
         for batch_idx, (target, input_noisy, input_GT, std) in enumerate(self.test_data_loader):
 
                 unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
-                input_noisy_patch = unfold(input_noisy[0])
-                print("input_noisy_patch:", input_noisy_patch.shape)
+
+
+                size = 256  # patch size
+                stride = 256  # patch stride
+                patches = input_noisy.unfold(1, size, stride).unfold(2, size, stride).unfold(3, size, stride)
+                print("input_noisy_patch:", input_noisy.shape, patches.shape)
 
 
                 input_noisy = input_noisy.to(self.device)
