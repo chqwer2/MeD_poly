@@ -120,8 +120,8 @@ def test():
     else:
         file_manager = FileManager(output_folder)
 
-    test_args = test_cfg['dataset_args']
-    test_dataset = PolyU(**test_args)
+    file_manager = FileManager(output_folder)
+    test_dataset = PolyU()
 
 
 
