@@ -95,34 +95,43 @@ class Test(BaseTrainer):
         for batch_idx, (target, input_noisy, input_GT, std) in enumerate(self.test_data_loader):
 
                 unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
+                (B, C, W, H) = input_noisy.shape
+                output = torch.zeros_like(input_noisy).to(self.device)
+                W_st = W_st//256
+                H_st = H_st//256
+                pad = 20
 
-
-                size = 256  # patch size
-                stride = 256  # patch stride
-                patches = input_noisy.unfold(2, size, stride).unfold(3, size, stride)
-                print("input_noisy_patch:", input_noisy.shape, patches.shape)
 
 
                 input_noisy = input_noisy.to(self.device)
                 input_GT = input_GT.to(self.device)
-                pad = 20
-                input_noisy = padr(input_noisy)
-                input_GT = padr(input_GT)
+                # input_GT = padr(input_GT)
 
-                print("input_noisy before model:", input_noisy.shape)
+                for i in range(W_st):
+                    for j in range(H_st):
 
-                noise_w, noise_b, clean = self.model(input_noisy)
+
+                        input = padr(input_noisy[:, :, i*256:(i+1)*256, j*256:(j+1)*256])
+                        input = padr(input)
+
+                        print("input_noisy before model:", input.shape)
+
+                        noise_w, noise_b, clean = self.model(input)
+                        output[:, :, i*256:(i+1)*256, j*256:(j+1)*256] = input_noisy[:, :, pad:-pad, pad:-pad]
+
 
                 size = [noise_b.shape[0],noise_b.shape[1],noise_b.shape[2]*noise_b.shape[3]]              
                 noise_b_normal = (noise_b-torch.min(noise_b.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))/(torch.max(noise_b.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)-torch.min(noise_b.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))    
                 noise_w_normal = (noise_w-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))/(torch.max(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)) 
-                if save==True:
-                    for i in range(input_noisy.shape[0]):
-                        save_image(torch.clamp(clean[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/C/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
-                        save_image(torch.clamp(input_GT[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/GT/' +target['dir_idx'][i]+'.PNG')
-                        save_image(torch.clamp(noise_b_normal[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/N_i/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
-                        save_image(torch.clamp(noise_w_normal[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/N_d/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
-                        save_image(torch.clamp(input_noisy[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/I/' +target['dir_idx'][i]+'.PNG')
+
+
+                # if save==True:
+                #     for i in range(input_noisy.shape[0]):
+                #         save_image(torch.clamp(clean[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/C/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
+                #         save_image(torch.clamp(input_GT[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/GT/' +target['dir_idx'][i]+'.PNG')
+                #         save_image(torch.clamp(noise_b_normal[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/N_i/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
+                #         save_image(torch.clamp(noise_w_normal[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/N_d/'+str(epoch)+'/'+target['dir_idx'][i]+'.PNG')
+                #         save_image(torch.clamp(input_noisy[i,:,pad:-pad,pad:-pad],min=0,max=1).detach().cpu(), '../output/I/' +target['dir_idx'][i]+'.PNG')
                 
 
                 
@@ -133,14 +142,17 @@ class Test(BaseTrainer):
 
                 for met in self.metric_ftns:
                     if met.__name__=="psnr":
-                       psnr = met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device),
-                                  torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1))
+                       # psnr = met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device),
+                       #            torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1))
+
+                       psnr = met(input_GT.to(self.device),
+                                  torch.clamp(output, min=0, max=1))
 
                        self.test_metrics.update('psnr', psnr)
                     elif met.__name__=="ssim":
                        self.test_metrics.update('ssim',
-                            met(input_GT[:,:,pad:-pad,pad:-pad].to(self.device),
-                                torch.clamp(clean[:,:,pad:-pad,pad:-pad],min=0,max=1)))
+                            met(input_GT.to(self.device),
+                                  torch.clamp(output, min=0, max=1),min=0,max=1))
 
                 self.writer.close()
               
