@@ -113,11 +113,11 @@ class Test(BaseTrainer):
                         # input = padr(input)
 
 
+                        with torch.no_grad():
+                            noise_w, noise_b, clean = self.model(input)
 
-                        noise_w, noise_b, clean = self.model(input)
-
-                        output[:, :, i*256:(i+1)*256, j*256:(j+1)*256] = \
-                            clean[:, :, pad:-pad, pad:-pad]
+                            output[:, :, i*256:(i+1)*256, j*256:(j+1)*256] = \
+                                clean[:, :, pad:-pad, pad:-pad]
 
 
                 size = [noise_b.shape[0],noise_b.shape[1],noise_b.shape[2]*noise_b.shape[3]]              
