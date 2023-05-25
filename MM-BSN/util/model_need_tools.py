@@ -8,6 +8,15 @@ from torch import optim
 from model.get_model import BSN
 from util.generator import rot_hflip_img,ssim, psnr
 
+
+import torch.nn.functional as F
+def padr(img):
+    pad = 20
+    pad_mod = 'reflect'
+    img_pad = F.pad(input=img, pad=(pad,pad,pad,pad), mode=pad_mod)
+
+    return img_pad
+
 @torch.no_grad()
 def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0., floor=False, img_save=True, img_save_path=None, info=True, logger=None, status=None):
     '''
@@ -53,17 +62,19 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
         output = torch.zeros_like(input_data[0]).to('cuda')
         W_st = W // 256 + 1
         H_st = H // 256 + 1
+        pad = 20
+
 
 
         for i in range(W_st):
             for j in range(H_st):
-                input = input_data[0][:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
+                input = padr(input_data[0][:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
 
                 with torch.no_grad():
                     clean = denoiser(*[input])
 
                 output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
-                    clean#[:, :, pad:-pad, pad:-pad]
+                    clean[:, :, pad:-pad, pad:-pad]
 
 
         denoised_image = output

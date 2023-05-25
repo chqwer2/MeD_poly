@@ -15,7 +15,8 @@ patch_size = 256
 def sgd(weight: torch.Tensor, grad: torch.Tensor, meta_lr) -> torch.Tensor:
     weight = weight - meta_lr * grad
     return weight
-    
+
+import torch.nn.functional as F
 def padr(img):
     pad = 20
     pad_mod = 'reflect'
