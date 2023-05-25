@@ -122,7 +122,7 @@ def test():
 
 
 
-    test_dataset = PolyU()
+    test_dataset = PolyU(**test_args)
 
 
 
