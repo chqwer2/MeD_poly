@@ -95,8 +95,8 @@ class Test(BaseTrainer):
                 unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
                 (B, C, W, H) = input_noisy.shape
                 output = torch.zeros_like(input_noisy).to(self.device)
-                W_st = W//256
-                H_st = H//256
+                W_st = W//256 + 1
+                H_st = H//256 + 1
                 pad = 20
 
 
