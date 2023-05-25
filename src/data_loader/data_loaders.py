@@ -23,6 +23,7 @@ class DataLoader(BaseDataLoader):
 
 
         # self.dataset = benchmark_data(self.data_dir, task=task, transform=None)
+        batch_size = 1
         self.dataset = PolyU()
         validation_split = 0.0
 
