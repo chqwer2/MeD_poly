@@ -128,7 +128,7 @@ class Test(BaseTrainer):
 
                 # if save==True:
                 for i in range(input_noisy.shape[0]):
-                    n = '../output/C/'+str(epoch)+'/'+std[i]+'.PNG'
+                    n = '../output/C/'+str(epoch)+'/'+str(std[i].numpy()) +'.PNG'
                     save_image(torch.clamp(output[i],min=0,max=1).detach().cpu(),
                                n)
 
