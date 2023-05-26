@@ -32,11 +32,13 @@ args = parser.parse_args()
 
 sigmas = np.int_(args.sigmas.split(','))
 
-datasets = ['CBSD68', 'Kodak', 'McMaster','Urban100']
+datasets = ['CBSD68'] #, 'Kodak', 'McMaster','Urban100']
 
 for dataset in datasets:
 
-    gt_path = os.path.join('Datasets','test', dataset)
+    # gt_path = os.path.join('Datasets','test', dataset)
+    gt_path = "../../../../data/denoising/CBSD68-dataset/CBSD68/original_png"
+
     gt_list = natsorted(glob(os.path.join(gt_path, '*.png')) + glob(os.path.join(gt_path, '*.tif')))
     assert len(gt_list) != 0, "Target files not found"
 

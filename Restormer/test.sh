@@ -14,7 +14,7 @@
 
 
 
-python evaluate_gaussian_color_denoising.py --model_type blind \
+python Denoising/evaluate_gaussian_color_denoising.py --model_type blind \
        --sigmas 15,25,50
 
 
