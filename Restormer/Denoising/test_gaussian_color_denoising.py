@@ -109,10 +109,10 @@ for sigma_test in sigmas:
 
                 restored = torch.clamp(restored,0,1).cpu().detach().permute(0, 2, 3, 1).squeeze(0).numpy()
 
-                print("restored:", restored.shape, img_in.shape)
+                # print("restored:", restored.shape, img_in.shape)
 
-                temp_psnr = compare_psnr(restored[0], img_in, data_range=1)
-                temp_ssim = compare_ssim(restored[0], img_in, data_range=1, channel_axis=-1, multichannel=True)
+                temp_psnr = compare_psnr(restored, img_in, data_range=1)
+                temp_ssim = compare_ssim(restored, img_in, data_range=1, channel_axis=-1, multichannel=True)
                 psnr.append(temp_psnr)
                 ssim.append(temp_ssim)
 
