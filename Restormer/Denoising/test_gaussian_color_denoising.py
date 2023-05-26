@@ -67,7 +67,7 @@ noise_types = [["s&p", 0], ["poisson", 0], ["local_val", 0],
 
 
 
-for np in args.noise_types:
+for np in noise_types:
     noise_type = np[0]
     sigma_test = np[1]
 
