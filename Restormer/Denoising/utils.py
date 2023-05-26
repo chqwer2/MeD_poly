@@ -93,6 +93,7 @@ def add_noise(clean, ntype, sigma=None):
 
     if 'gaussian' in ntype:
         noisy = clean + np.random.normal(0, sigma, clean.shape)
+        return noisy
 
     elif  ntype == "poisson":
         noisy = poisson(img)

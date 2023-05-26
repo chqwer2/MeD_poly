@@ -107,7 +107,8 @@ for np2 in noise_types:
                 np.random.seed(seed=0)  # for reproducibility
                 img = img_in.copy()
 
-                img = add_noise(img, noise_type, sigma=sigma_test/255) #np.random.normal(0, sigma_test/255., img_in.shape)
+                img = add_noise(img, noise_type, sigma=sigma_test/255)
+                #np.random.normal(0, sigma_test/255., img_in.shape)
 
                 img = torch.from_numpy(img).permute(2,0,1)
                 input_ = img.unsqueeze(0).cuda()
