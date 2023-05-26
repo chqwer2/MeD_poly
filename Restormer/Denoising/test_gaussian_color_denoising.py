@@ -67,9 +67,9 @@ noise_types = [["s&p", 0], ["poisson", 0], ["local_val", 0],
 
 
 
-for np in noise_types:
-    noise_type = np[0]
-    sigma_test = np[1]
+for np2 in noise_types:
+    noise_type = np2[0]
+    sigma_test = np2[1]
 
 
     print("Compute results for noise level",sigma_test)
