@@ -58,8 +58,9 @@ datasets = ['CBSD68']
 
 
 
-noise_types = [["s&p", 0],  ["speckle", 25], ["speckle", 50] ,
-               ['gaussian', 25],  ['gaussian', 50], ['gaussian', 75]]
+noise_types = [['gaussian', 25],  ['gaussian', 50], ['gaussian', 75],
+    ["s&p", 0],  ["speckle", 25], ["speckle", 50]
+               ]
 
 
 
