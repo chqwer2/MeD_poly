@@ -49,7 +49,7 @@ sigmas = np.int_(args.sigmas.split(','))
 
 factor = 8
 
-datasets = ['CBSD68', 'Kodak', 'McMaster','Urban100']
+datasets = ['CBSD68']
 
 for sigma_test in sigmas:
     print("Compute results for noise level",sigma_test)
@@ -69,6 +69,8 @@ for sigma_test in sigmas:
 
     for dataset in datasets:
         inp_dir = os.path.join(args.input_dir, dataset)
+        inp_dir = "../../../../../data/denoising/CBSD68-dataset/CBSD68/original_png"
+
         files = natsorted(glob(os.path.join(inp_dir, '*.png')) + glob(os.path.join(inp_dir, '*.tif')))
         result_dir_tmp = os.path.join(args.result_dir, args.model_type, dataset, str(sigma_test))
         os.makedirs(result_dir_tmp, exist_ok=True)
