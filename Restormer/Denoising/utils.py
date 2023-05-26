@@ -69,7 +69,7 @@ def salt_pepper_3_torch(img, amount=0.05, salt_vs_pepper=0.3):
 
 
 def poisson(img):
-    img_ = (img.clone() * 255).to(torch.uint8)  # .uint8()
+    img_ = (img.opy() * 255).to(torch.uint8)  # .uint8()
     # img = (scipy.misc.imread(filename)).astype(float)
     # noise_mask = numpy.random.poisson(img)
 
