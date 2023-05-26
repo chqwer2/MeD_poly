@@ -88,7 +88,7 @@ for sigma_test in sigmas:
                 img_in = np.float32(utils.load_img(file_))/255.
 
                 np.random.seed(seed=0)  # for reproducibility
-                img = img_in.clone()
+                img = img_in.copy()
 
                 img += np.random.normal(0, sigma_test/255., img_in.shape)
 
