@@ -90,7 +90,7 @@ def add_noise(clean, ntype, sigma=None):
     # assert ntype.lower() in ['gaussian', 'gaussian_gray', 'impulse', 'binomial', 'pattern1', 'pattern2', 'pattern3', 'line']
     assert sigma < 1
 
-    img = clean.copy()
+    img = torch.from_numpy(clean.copy())
     print("img max:", torch.max(img))
 
     if 'gaussian' in ntype:
@@ -135,7 +135,7 @@ def add_noise(clean, ntype, sigma=None):
     else:
         assert 'not support %s' % args.ntype
 
-    return noisy
+    return noisy.numpy()
 
 
 
