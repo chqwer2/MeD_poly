@@ -18,6 +18,9 @@ from glob import glob
 import utils
 from pdb import set_trace as stx
 
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr
+from skimage.metrics import structural_similarity as compare_ssim
+
 parser = argparse.ArgumentParser(description='Gaussian Color Denoising using Restormer')
 
 parser.add_argument('--input_dir', default='./Datasets/test/', type=str, help='Directory of validation images')
@@ -75,14 +78,17 @@ for sigma_test in sigmas:
         result_dir_tmp = os.path.join(args.result_dir, args.model_type, dataset, str(sigma_test))
         os.makedirs(result_dir_tmp, exist_ok=True)
 
+        psnr = []
+        ssim = []
+
         with torch.no_grad():
             for file_ in tqdm(files):
                 torch.cuda.ipc_collect()
                 torch.cuda.empty_cache()
-                img = np.float32(utils.load_img(file_))/255.
+                img_in = np.float32(utils.load_img(file_))/255.
 
                 np.random.seed(seed=0)  # for reproducibility
-                img += np.random.normal(0, sigma_test/255., img.shape)
+                img = img_in + np.random.normal(0, sigma_test/255., img_in.shape)
 
                 img = torch.from_numpy(img).permute(2,0,1)
                 input_ = img.unsqueeze(0).cuda()
@@ -101,5 +107,13 @@ for sigma_test in sigmas:
 
                 restored = torch.clamp(restored,0,1).cpu().detach().permute(0, 2, 3, 1).squeeze(0).numpy()
 
-                save_file = os.path.join(result_dir_tmp, os.path.split(file_)[-1])
-                utils.save_img(save_file, img_as_ubyte(restored))
+
+                temp_psnr = compare_psnr(restored, img_in, data_range=1)
+                temp_ssim = compare_ssim(restored, img_in, data_range=1, multichannel=True)
+                psnr.append(temp_psnr)
+                ssim.append(temp_ssim)
+
+
+                # save_file = os.path.join(result_dir_tmp, os.path.split(file_)[-1])
+                # utils.save_img(save_file, img_as_ubyte(restored))
+        print("[Sigma: ",sigma_test,"] psnr:", np.mean(psnr), "ssim:", np.mean(ssim))
