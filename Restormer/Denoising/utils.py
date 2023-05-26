@@ -7,6 +7,140 @@ import os
 import cv2
 import math
 
+
+
+rng = np.random.default_rng(seed=36)
+
+import torch
+
+def _bernoulli(p, shape):
+    return torch.rand(shape) <= p
+
+
+def gaussian(img, sigma):
+    # + np.random.normal(0, self.sigma / 255.0, img_L2.shape)
+    return img + torch.FloatTensor(img.shape).normal_(mean=0, std=sigma)
+
+
+def gaussian_localvar(img):
+    # var ** 0.5
+    noise = np.random.normal(0, torch.sqrt(img * 255).numpy(), img.shape) / 255
+    # print("noise max:", np.max(noise))
+    # print("noise img:", torch.max(img)
+    return img + noise  # torch.FloatTensor(img.shape).normal_(mean=0, std=torch.sqrt(img).numpy())
+
+
+def salt_pepper(img, amount=0.05, salt_vs_pepper=0.5):
+    flipped = _bernoulli(amount, img.shape)
+    salted = _bernoulli(salt_vs_pepper, img.shape)
+    peppered = ~salted
+
+    img[flipped & salted] = 1
+    img[flipped & peppered] = 0
+
+    return img
+
+
+def salt_pepper_3(img, amount=0.05, salt_vs_pepper=0.3):
+    #
+    flipped = _bernoulli(amount, img.shape[:2]).unsqueeze(-1).repeat(1, 1, 3)
+    salted = _bernoulli(salt_vs_pepper, img.shape[:2]).unsqueeze(-1).repeat(1, 1, 3)
+    # flipped = torch.repeat
+    peppered = ~salted
+
+    img[flipped & salted] = 1
+    img[flipped & peppered] = 0
+
+    return img, flipped & salted
+
+
+def salt_pepper_3_torch(img, amount=0.05, salt_vs_pepper=0.3):
+    peppered = _bernoulli(amount, img.shape[-2:]).unsqueeze(0).repeat(3, 1, 1)
+
+    # salted = _bernoulli(salt_vs_pepper, img.shape[-2:]).unsqueeze(0).repeat(3, 1, 1)
+    #
+    # # flipped = torch.repeat
+    # peppered = ~salted
+    #
+    # img[flipped & salted] = 1
+    img[peppered] = 0
+
+    return img  # , peppered
+
+
+def poisson(img):
+    img_ = (img.clone() * 255).to(torch.uint8)  # .uint8()
+    # img = (scipy.misc.imread(filename)).astype(float)
+    # noise_mask = numpy.random.poisson(img)
+
+    vals = torch.unique(img_).shape[0]  # length
+    vals = 2 ** torch.ceil(torch.as_tensor(np.log2(vals)))  # 255
+
+    img = torch.poisson(img_ * vals) / float(vals) / 255
+
+    return img
+
+
+def speckle(img, sigma):
+    return img + img * torch.FloatTensor(img.shape).normal_(mean=0, std=sigma)
+
+
+
+def add_noise(clean, ntype, sigma=None):
+    # assert ntype.lower() in ['gaussian', 'gaussian_gray', 'impulse', 'binomial', 'pattern1', 'pattern2', 'pattern3', 'line']
+    assert sigma < 1
+
+    img = clean.clone()
+    print("img max:", torch.max(img))
+
+    if 'gaussian' in ntype:
+        noisy = clean + np.random.normal(0, sigma, clean.shape)
+
+    elif  ntype == "poisson":
+        noisy = poisson(img)
+
+    elif  ntype == "local_val":
+        noisy = gaussian_localvar(img)
+
+    elif  ntype == "s&p":
+        noisy = salt_pepper(img, amount=0.05, salt_vs_pepper=0.5)
+
+
+    elif  ntype == "speckle":
+        noisy = speckle(img, sigma)
+
+
+    elif ntype == 'binomial':
+        h, w, c = clean.shape
+        mask = np.random.binomial(n=1, p=(1 - sigma), size=(h, w, 1))
+        noisy = clean * mask
+
+    elif ntype == 'impulse':
+        mask = np.random.binomial(n=1, p=(1 - sigma), size=clean.shape)
+        noisy = clean * mask
+
+    elif ntype[:4] == 'line':
+        # sigma = 25 / 255.0
+        h, w, c = clean.shape
+        line_noise = np.ones_like(clean) * np.random.normal(0, sigma, (h, 1, 1))
+        noisy = clean + line_noise
+
+    elif ntype[:7] == 'pattern':
+        # sigma = 5 / 255.0
+        h, w, c = clean.shape
+        n_type = int(ntype[7:])
+
+        one_image_noise, _, _ = get_experiment_noise('g%d' % n_type, sigma, 0, (h, w, 3))
+        noisy = clean + one_image_noise
+    else:
+        assert 'not support %s' % args.ntype
+
+    return noisy
+
+
+
+
+
 def calculate_psnr(img1, img2, border=0):
     # img1 and img2 have range [0, 255]
     #img1 = img1.squeeze()

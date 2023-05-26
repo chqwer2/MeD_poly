@@ -17,6 +17,8 @@ from natsort import natsorted
 from glob import glob
 import utils
 from pdb import set_trace as stx
+from utils import *
+
 
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 from skimage.metrics import structural_similarity as compare_ssim
@@ -54,7 +56,22 @@ factor = 8
 
 datasets = ['CBSD68']
 
-for sigma_test in sigmas:
+
+
+noise_types = [["s&p", 0], ["poisson", 0], ["local_val", 0],
+                    ["speckle", 25], ["speckle", 50]]
+
+
+
+
+
+
+
+for np in args.noise_types:
+    noise_type = np[0]
+    sigma_test = np[1]
+
+
     print("Compute results for noise level",sigma_test)
     model_restoration = Restormer(**x['network_g'])
     if args.model_type == 'blind':
@@ -90,7 +107,7 @@ for sigma_test in sigmas:
                 np.random.seed(seed=0)  # for reproducibility
                 img = img_in.copy()
 
-                img += np.random.normal(0, sigma_test/255., img_in.shape)
+                img = add_noise(img, noise_type, sigma=sigma_test) #np.random.normal(0, sigma_test/255., img_in.shape)
 
                 img = torch.from_numpy(img).permute(2,0,1)
                 input_ = img.unsqueeze(0).cuda()
@@ -119,4 +136,4 @@ for sigma_test in sigmas:
 
                 # save_file = os.path.join(result_dir_tmp, os.path.split(file_)[-1])
                 # utils.save_img(save_file, img_as_ubyte(restored))
-        print("[Sigma: ",sigma_test,"] psnr:", np.mean(psnr), "ssim:", np.mean(ssim))
+        print(f"[{noise_type} Sigma: ", sigma_test,"] psnr:", np.mean(psnr), "ssim:", np.mean(ssim))
