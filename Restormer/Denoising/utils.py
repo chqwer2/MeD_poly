@@ -91,7 +91,6 @@ def add_noise(clean, ntype, sigma=None):
     assert sigma < 1
 
     img = torch.from_numpy(clean.copy())
-    print("img max:", torch.max(img))
 
     if 'gaussian' in ntype:
         noisy = clean + np.random.normal(0, sigma, clean.shape)
