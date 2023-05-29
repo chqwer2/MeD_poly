@@ -35,8 +35,8 @@ class PolyU(Dataset):
     def __init__(self,  **kwargs):
         super().__init__( **kwargs)
 
-        self.paths_L = glob("../../../../../../data/denoising/PolyU/gt/*")
-        self.paths_H = glob("../../../../../../data/denoising/PolyU/noisy/*")
+        self.paths_L = glob("../../../../data/denoising/PolyU/gt/*")
+        self.paths_H = glob("../../../../data/denoising/PolyU/noisy/*")
         self.paths_H.sort()
         self.paths_L.sort()
 
