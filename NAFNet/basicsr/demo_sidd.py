@@ -24,7 +24,7 @@ import os
 import scipy.io as sio
 
 # SIDD
-input_dir = "../../../../../data/SIDD_sRGB/"
+input_dir = "../../../../../../data/SIDD_sRGB/"
 
 filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
 img = sio.loadmat(filepath)
