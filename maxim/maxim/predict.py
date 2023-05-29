@@ -146,3 +146,4 @@ class Predictor(BasePredictor):
         ).save(str(out_path))
 
         return out_path
+
