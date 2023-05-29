@@ -78,7 +78,7 @@ def main():
                 # if float32:
                 # img = img.float()
                 input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0, 3, 1, 2).float().cuda()
-                input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).float().cuda() #* 255
+                input_GT = torch.from_numpy(GT[i, j]).permute(0, 3, 1, 2).unsqueeze(0).float().cuda() #* 255
 
                 ## 1. read image
 
@@ -99,7 +99,7 @@ def main():
                 # visuals = model.get_current_visuals()
                 # output = tensor2img([visuals['result']])
 
-            print("out:", output.max(), input_GT.max())
+            print("out:", output.shape, input_GT.max())
 
             psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
             ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
