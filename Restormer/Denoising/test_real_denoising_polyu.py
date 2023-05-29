@@ -161,7 +161,7 @@ ssim_list = []
 
 with torch.no_grad():
     for batch_idx, (input_GT, input_noisy) in enumerate(test_dataloader):  # id
-        print("input_GT:", input_noisy.shape)
+
 
         input_noisy = input_noisy.cuda()
         input_GT = input_GT.cuda()
@@ -178,21 +178,19 @@ with torch.no_grad():
             for j in range(H_st):
 
                 noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
-                print("noisy_patch shape:", noisy_patch.shape)
 
                 clean = model_restoration(noisy_patch)
 
-                print("clean:", clean.shape)
 
                 output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
                     clean[:, :, pad:-pad, pad:-pad]
 
-                psnr = compare_psnr(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1)
-                ssim = compare_ssim(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1, multichannel=True,
-                                    channel_axis=-1)
+        psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
+        ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
+                            channel_axis=0)
 
-                psnr_list.append(psnr)
-                ssim_list.append(ssim)
+        psnr_list.append(psnr)
+        ssim_list.append(ssim)
 
 
 
