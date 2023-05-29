@@ -149,7 +149,7 @@ test_dataloader = DataLoader(D, batch_size=1,
 def padr(img):
     pad = 20
     pad_mod = 'reflect'
-    img = F.pad(input=img, pad=(0,pad,pad,pad), mode=pad_mod)
+    img = F.pad(input=img, pad=(0,0,pad,pad), mode=pad_mod)
     return img
 
 device = torch.device('cuda')
@@ -178,6 +178,8 @@ with torch.no_grad():
             for j in range(H_st):
 
                 noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
+                print("noisy_patch shape:", noisy_patch.shape)
+
                 clean = model_restoration(noisy_patch)
 
                 print("clean:", clean.shape)
