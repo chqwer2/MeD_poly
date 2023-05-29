@@ -45,7 +45,7 @@ for data in args.data.split('-'):
 
             print('SIDD Validation Data!')
             # gdown.download(id=SIDD_val, output='Datasets/val.zip', quiet=False)
-            os.system(f'gdown download {SIDD_val} -O Datasets/val.zip')
+            os.system(f'gdown {SIDD_val} -O Datasets/val.zip')
             print('Extracting SIDD Data...')
             shutil.unpack_archive('Datasets/val.zip', 'Datasets')
             os.remove('Datasets/val.zip')
