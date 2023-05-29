@@ -73,6 +73,7 @@ macs, params = get_model_complexity_info(model_restoration, inp_shape, verbose=F
 # MACs (G) in log scale
 print(params)
 macs = float(macs[:-4]) + FLOPS / 10 ** 9
+# 140.99 26.11 M
 
 print('mac', macs, params)
 
@@ -104,6 +105,7 @@ device = torch.device('cuda')
 psnr_list =[]
 ssim_list = []
 
+print("Inoisy:", Inoisy.shape)
 
 with torch.no_grad():
     for i in tqdm(range(Inoisy.shape[0])):  # id
