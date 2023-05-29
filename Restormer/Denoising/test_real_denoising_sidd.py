@@ -130,10 +130,10 @@ with torch.no_grad():
 
             # output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
             #     clean[:, :, pad:-pad, pad:-pad]
-
-            psnr = compare_psnr(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1)
-            ssim = compare_ssim(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1, multichannel=True,
-                                channel_axis=1)
+            print("input_GT.cpu().numpy()[0]:", input_GT.cpu().numpy()[0].shape)
+            psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
+            ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
+                                channel_axis=0)
 
             psnr_list.append(psnr)
             ssim_list.append(ssim)
