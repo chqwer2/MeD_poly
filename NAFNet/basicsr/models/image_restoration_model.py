@@ -254,7 +254,7 @@ class ImageRestorationModel(BaseModel):
         self.net_g.train()
 
     def forward(self):
-        self..eval()
+        self.net_g.eval()
         with torch.no_grad():
             n = len(self.lq)
             outs = []
