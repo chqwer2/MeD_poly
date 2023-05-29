@@ -109,7 +109,7 @@ print("Inoisy:", Inoisy.shape)  #  (40, 32, 256, 256, 3)
 
 with torch.no_grad():
     for i in tqdm(range(Inoisy.shape[0])):  # id
-        for j in tqdm(range(Inoisy.shape[2])):  # id
+        for j in tqdm(range(Inoisy.shape[1])):  # id
             input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0,3,1,2).cuda()
             input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).permute(0,3,1,2).cuda()
 
@@ -130,7 +130,7 @@ with torch.no_grad():
 
             # output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
             #     clean[:, :, pad:-pad, pad:-pad]
-            print("input_GT.cpu().numpy()[0]:", input_GT.cpu().numpy()[0].shape)
+            # print("input_GT.cpu().numpy()[0]:", input_GT.cpu().numpy()[0].shape)
             psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
             ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
                                 channel_axis=0)
