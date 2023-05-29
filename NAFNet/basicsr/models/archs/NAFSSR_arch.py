@@ -18,9 +18,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from basicsr.models.archs.NAFNet_arch import LayerNorm2d, NAFBlock
-from basicsr.models.archs.arch_util import MySequential
-from basicsr.models.archs.local_arch import Local_Base
+from models.archs.NAFNet_arch import LayerNorm2d, NAFBlock
+from models.archs.arch_util import MySequential
+from models.archs.local_arch import Local_Base
 
 class SCAM(nn.Module):
     '''
@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
     print('mac', macs, params)
 
-    # from basicsr.models.archs.arch_util import measure_inference_speed
+    # from models.archs.arch_util import measure_inference_speed
     # net = net.cuda()
     # data = torch.randn((1, 6, 128, 128)).cuda()
     # measure_inference_speed(net, (data,))
