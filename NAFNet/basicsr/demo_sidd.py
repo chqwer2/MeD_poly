@@ -56,7 +56,7 @@ def main():
     # pip install ptflops
     from ptflops import get_model_complexity_info
     FLOPS = 0
-    macs, params = get_model_complexity_info(model, inp_shape, verbose=False, print_per_layer_stat=True)
+    macs, params = get_model_complexity_info(model.net_g, inp_shape, verbose=False, print_per_layer_stat=True)
 
     # params = float(params[:-4])
     # MACs (G) in log scale

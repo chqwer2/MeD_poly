@@ -253,6 +253,26 @@ class ImageRestorationModel(BaseModel):
             self.output = torch.cat(outs, dim=0)
         self.net_g.train()
 
+    def forward(self):
+        self..eval()
+        with torch.no_grad():
+            n = len(self.lq)
+            outs = []
+            m = self.opt['val'].get('max_minibatch', n)
+            i = 0
+            while i < n:
+                j = i + m
+                if j >= n:
+                    j = n
+                pred = self.net_g(self.lq[i:j])
+                if isinstance(pred, list):
+                    pred = pred[-1]
+                outs.append(pred.detach().cpu())
+                i = j
+
+            self.output = torch.cat(outs, dim=0)
+        self.net_g.train()
+
     def dist_validation(self, dataloader, current_iter, tb_logger, save_img, rgb2bgr, use_image):
         dataset_name = dataloader.dataset.opt['name']
         with_metrics = self.opt['val'].get('metrics') is not None
