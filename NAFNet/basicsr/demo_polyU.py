@@ -118,6 +118,7 @@ def main():
             W_st = W // 256 + 1
             H_st = H // 256 + 1
             pad = 20
+            print(" input_noisy:",  input_noisy.max())
 
             for i in range(W_st):
                 for j in range(H_st):
@@ -129,7 +130,7 @@ def main():
 
                     output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = clean
 
-
+            output = torch.clamp(output, 0, 1)
             print('img', output.max(), input_GT.max())
 
             psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
