@@ -105,38 +105,38 @@ device = torch.device('cuda')
 psnr_list =[]
 ssim_list = []
 
-print("Inoisy:", Inoisy.shape)
+print("Inoisy:", Inoisy.shape)  #  (40, 32, 256, 256, 3)
 
 with torch.no_grad():
     for i in tqdm(range(Inoisy.shape[0])):  # id
+        for j in tqdm(range(Inoisy.shape[2])):  # id
+            input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0,3,1,2).cuda()
+            input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).permute(0,3,1,2).cuda()
 
-        input_noisy = torch.from_numpy(Inoisy[i]).unsqueeze(0).permute(0,3,1,2).cuda()
-        input_GT = torch.from_numpy(GT[i]).unsqueeze(0).permute(0,3,1,2).cuda()
+            # unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
+            # (B, C, W, H) = input_noisy.shape
+            #
+            # output = torch.zeros_like(input_noisy).to(device)
+            # W_st = W // 256 + 1
+            # H_st = H // 256 + 1
+            # pad = 20
+            #
+            #
+            # for i in range(W_st):
+            #     for j in range(H_st):
 
-        unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
-        (B, C, W, H) = input_noisy.shape
+            # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
+            output = model_restoration(input_noisy) #noisy_patch)
 
-        output = torch.zeros_like(input_noisy).to(device)
-        W_st = W // 256 + 1
-        H_st = H // 256 + 1
-        pad = 20
+            # output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
+            #     clean[:, :, pad:-pad, pad:-pad]
 
+            psnr = compare_psnr(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1)
+            ssim = compare_ssim(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1, multichannel=True,
+                                channel_axis=-1)
 
-        for i in range(W_st):
-            for j in range(H_st):
-
-                noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
-                clean = model_restoration(noisy_patch)
-
-                output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
-                    clean[:, :, pad:-pad, pad:-pad]
-
-                psnr = compare_psnr(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1)
-                ssim = compare_ssim(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1, multichannel=True,
-                                    channel_axis=-1)
-
-                psnr_list.append(psnr)
-                ssim_list.append(ssim)
+            psnr_list.append(psnr)
+            ssim_list.append(ssim)
 
 
 
