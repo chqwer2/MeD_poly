@@ -136,8 +136,7 @@ class PolyU(Dataset):
 
 
         # print("img_H:", img_H.shape)
-        return 0, \
-            np.array(img_L, dtype=np.float32),  np.array(img_H, dtype=np.float32), idx
+        return np.array(img_H, dtype=np.float32),  np.array(img_L, dtype=np.float32)
 
 
 D = PolyU()
@@ -164,8 +163,8 @@ with torch.no_grad():
     for batch_idx, (input_GT, input_noisy) in enumerate(test_dataloader):  # id
         print("input_GT:", input_GT.shape)
 
-        input_noisy = input_noisy.cuda()/255.
-        input_GT = input_GT.cuda()/ 255.
+        input_noisy = input_noisy.cuda()
+        input_GT = input_GT.cuda()
 
         unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
         (B, C, W, H) = input_noisy.shape
