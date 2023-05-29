@@ -18,11 +18,10 @@ logger = logging.getLogger('basicsr')
 
 from torch import nn
 
-class BaseModel(nn.Module):
+class BaseModel():
     """Base model."""
     # not nn
     def __init__(self, opt):
-        super(BaseModel, self).__init__()
 
         self.opt = opt
         self.device = torch.device('cuda' if opt['num_gpu'] != 0 else 'cpu')
