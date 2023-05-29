@@ -16,8 +16,9 @@ from utils.dist_util import master_only
 
 logger = logging.getLogger('basicsr')
 
+from torch import nn
 
-class BaseModel():
+class BaseModel(nn.Module):
     """Base model."""
 
     def __init__(self, opt):

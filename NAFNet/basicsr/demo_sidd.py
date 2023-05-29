@@ -48,7 +48,7 @@ def main():
     ## 2. run inference
     opt['dist'] = False
     model = create_model(opt)
-
+    model.eval()
 
 
     inp_shape = (3, 256, 256)
