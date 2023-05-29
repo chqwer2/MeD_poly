@@ -7,11 +7,11 @@
 from torch.utils import data as data
 from torchvision.transforms.functional import normalize, resize
 
-from basicsr.data.data_util import (paired_paths_from_folder,
+from data.data_util import (paired_paths_from_folder,
                                     paired_paths_from_lmdb,
                                     paired_paths_from_meta_info_file)
-from basicsr.data.transforms import augment, paired_random_crop_hw
-from basicsr.utils import FileClient, imfrombytes, img2tensor, padding
+from data.transforms import augment, paired_random_crop_hw
+from utils import FileClient, imfrombytes, img2tensor, padding
 import os
 import numpy as np
 

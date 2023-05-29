@@ -8,8 +8,8 @@ from os import path as osp
 from torch.utils import data as data
 from torchvision.transforms.functional import normalize
 
-from basicsr.data.transforms import augment
-from basicsr.utils import FileClient, imfrombytes, img2tensor
+from data.transforms import augment
+from utils import FileClient, imfrombytes, img2tensor
 
 
 class FFHQDataset(data.Dataset):
