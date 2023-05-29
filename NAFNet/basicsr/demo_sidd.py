@@ -7,9 +7,9 @@
 import torch
 
 # from basicsr.data import create_dataloader, create_dataset
-from basicsr.models import create_model
-from basicsr.train import parse_options
-from basicsr.utils import FileClient, imfrombytes, img2tensor, padding, tensor2img, imwrite
+from models import create_model
+from train import parse_options
+from utils import FileClient, imfrombytes, img2tensor, padding, tensor2img, imwrite
 
 # from basicsr.utils import (get_env_info, get_root_logger, get_time_str,
 #                            make_exp_dirs)
