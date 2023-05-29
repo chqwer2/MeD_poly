@@ -3,8 +3,8 @@ import torch
 from pathlib import Path
 from torch.utils import data as data
 
-from basicsr.data.transforms import augment, paired_random_crop
-from basicsr.utils import FileClient, get_root_logger, imfrombytes, img2tensor
+from data.transforms import augment, paired_random_crop
+from utils import FileClient, get_root_logger, imfrombytes, img2tensor
 
 
 class Vimeo90KDataset(data.Dataset):

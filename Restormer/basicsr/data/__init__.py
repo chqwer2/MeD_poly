@@ -6,9 +6,9 @@ import torch.utils.data
 from functools import partial
 from os import path as osp
 
-from basicsr.data.prefetch_dataloader import PrefetchDataLoader
-from basicsr.utils import get_root_logger, scandir
-from basicsr.utils.dist_util import get_dist_info
+from data.prefetch_dataloader import PrefetchDataLoader
+from utils import get_root_logger, scandir
+from utils.dist_util import get_dist_info
 
 __all__ = ['create_dataset', 'create_dataloader']
 
@@ -21,7 +21,7 @@ dataset_filenames = [
 ]
 # import all the dataset modules
 _dataset_modules = [
-    importlib.import_module(f'basicsr.data.{file_name}')
+    importlib.import_module(f'data.{file_name}')
     for file_name in dataset_filenames
 ]
 
