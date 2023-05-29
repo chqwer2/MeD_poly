@@ -29,7 +29,7 @@ from PIL import Image
 import random
 import numpy as np
 
-
+from torch.utils.data import Dataset
 
 class PolyU(Dataset):
     def __init__(self,  **kwargs):
