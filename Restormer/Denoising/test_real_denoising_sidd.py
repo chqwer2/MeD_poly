@@ -133,7 +133,7 @@ with torch.no_grad():
 
             psnr = compare_psnr(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1)
             ssim = compare_ssim(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1, multichannel=True,
-                                channel_axis=-1)
+                                channel_axis=1)
 
             psnr_list.append(psnr)
             ssim_list.append(ssim)
