@@ -37,7 +37,7 @@ for data in args.data.split('-'):
             print('SIDD Training Data!')
             os.makedirs(os.path.join('Datasets', 'Downloads'), exist_ok=True)
             # gdown.download(id=SIDD_train, output='Datasets/Downloads/train.zip', quiet=False)
-            os.system(f'gdown download {SIDD_train} --path Datasets/Downloads/')
+            os.system(f'gdown {SIDD_train} --O Datasets/Downloads/train.zip')
             print('Extracting SIDD Data...')
             shutil.unpack_archive('Datasets/Downloads/train.zip', 'Datasets/Downloads')
             os.rename(os.path.join('Datasets', 'Downloads', 'train'), os.path.join('Datasets', 'Downloads', 'SIDD'))
@@ -45,7 +45,7 @@ for data in args.data.split('-'):
 
             print('SIDD Validation Data!')
             # gdown.download(id=SIDD_val, output='Datasets/val.zip', quiet=False)
-            os.system(f'gdown download {SIDD_val} --path Datasets/')
+            os.system(f'gdown download {SIDD_val} --O Datasets/val.zip')
             print('Extracting SIDD Data...')
             shutil.unpack_archive('Datasets/val.zip', 'Datasets')
             os.remove('Datasets/val.zip')
@@ -54,7 +54,7 @@ for data in args.data.split('-'):
             if args.dataset == 'all' or args.dataset == 'SIDD':
                 print('SIDD Testing Data!')
                 # gdown.download(id=SIDD_test, output='Datasets/test.zip', quiet=False)
-                os.system(f'gdrive download {SIDD_test} --path Datasets/')
+                os.system(f'gdrive {SIDD_test} --path Datasets/')
                 print('Extracting SIDD Data...')
                 shutil.unpack_archive('Datasets/test.zip', 'Datasets')
                 os.remove('Datasets/test.zip')
