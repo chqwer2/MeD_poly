@@ -149,7 +149,7 @@ test_dataloader = DataLoader(D, batch_size=1,
 def padr(img):
     pad = 20
     pad_mod = 'reflect'
-    img = F.pad(input=img, pad=(0,0,pad,pad), mode=pad_mod)
+    img = F.pad(input=img, pad=(0,0,pad,pad, pad), mode=pad_mod)
     return img
 
 device = torch.device('cuda')
