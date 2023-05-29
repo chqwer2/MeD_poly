@@ -78,7 +78,7 @@ def main():
                 # if float32:
                 # img = img.float()
                 input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0, 3, 1, 2).float().cuda()
-                input_GT = torch.from_numpy(GT[i, j]).permute(0, 3, 1, 2).unsqueeze(0).float().cuda() #* 255
+                input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).permute(0, 3, 1, 2).float().cuda() #* 255
 
                 ## 1. read image
 
