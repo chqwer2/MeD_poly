@@ -74,8 +74,11 @@ def main():
     with torch.no_grad():
         for i in tqdm(range(Inoisy.shape[0])):  # id
             for j in tqdm(range(Inoisy.shape[1])):  # id
-                input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
-                input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).cuda() #* 255
+                # img = torch.from_numpy(img.transpose(2, 0, 1))
+                # if float32:
+                # img = img.float()
+                input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0, 3, 1, 2).float().cuda()
+                input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).float().cuda() #* 255
 
                 ## 1. read image
 
