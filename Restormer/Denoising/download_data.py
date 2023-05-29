@@ -35,13 +35,13 @@ for data in args.data.split('-'):
     if noise == 'real':
         if data == 'train':
             print('SIDD Training Data!')
-            os.makedirs(os.path.join('Datasets', 'Downloads'), exist_ok=True)
-            # gdown.download(id=SIDD_train, output='Datasets/Downloads/train.zip', quiet=False)
-            os.system(f'gdown {SIDD_train} -O Datasets/Downloads/train.zip')
-            print('Extracting SIDD Data...')
-            shutil.unpack_archive('Datasets/Downloads/train.zip', 'Datasets/Downloads')
-            os.rename(os.path.join('Datasets', 'Downloads', 'train'), os.path.join('Datasets', 'Downloads', 'SIDD'))
-            os.remove('Datasets/Downloads/train.zip')
+            # os.makedirs(os.path.join('Datasets', 'Downloads'), exist_ok=True)
+            # # gdown.download(id=SIDD_train, output='Datasets/Downloads/train.zip', quiet=False)
+            # os.system(f'gdown {SIDD_train} -O Datasets/Downloads/train.zip')
+            # print('Extracting SIDD Data...')
+            # shutil.unpack_archive('Datasets/Downloads/train.zip', 'Datasets/Downloads')
+            # os.rename(os.path.join('Datasets', 'Downloads', 'train'), os.path.join('Datasets', 'Downloads', 'SIDD'))
+            # os.remove('Datasets/Downloads/train.zip')
 
             print('SIDD Validation Data!')
             # gdown.download(id=SIDD_val, output='Datasets/val.zip', quiet=False)
