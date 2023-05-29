@@ -74,7 +74,7 @@ def main():
         for i in tqdm(range(Inoisy.shape[0])):  # id
             for j in tqdm(range(Inoisy.shape[1])):  # id
                 input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
-                input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).cuda()
+                input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).cuda() * 255
 
                 ## 1. read image
 
@@ -94,8 +94,8 @@ def main():
 
             # print("output[0], input_GT.:", output.shape, input_GT.shape)
 
-            psnr = compare_psnr(output, input_GT.cpu().numpy()[0], data_range=1)
-            ssim = compare_ssim(output, input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
+            psnr = compare_psnr(output, input_GT.cpu().numpy()[0], data_range=255)
+            ssim = compare_ssim(output, input_GT.cpu().numpy()[0], data_range=255, multichannel=True,
                                 channel_axis=-1)
 
             psnr_list.append(psnr)
