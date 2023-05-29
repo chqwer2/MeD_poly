@@ -39,6 +39,7 @@ GT /=255.
 from tqdm import tqdm
 
 
+
 def main():
 
     # parse options, set distributed setting, set ramdom seed
@@ -92,7 +93,7 @@ def main():
                 visuals = model.get_current_visuals()
                 output = tensor2img([visuals['result']])
 
-            # print("output[0], input_GT.:", output.shape, input_GT.shape)
+            print("output[0], input_GT.:", output.max(), input_GT.max())
 
             psnr = compare_psnr(output, input_GT.cpu().numpy()[0], data_range=255)
             ssim = compare_ssim(output, input_GT.cpu().numpy()[0], data_range=255, multichannel=True,
