@@ -92,6 +92,7 @@ def main():
                 visuals = model.get_current_visuals()
                 output = tensor2img([visuals['result']])
 
+            print("output[0], input_GT.:", output.shape, input_GT.shape)
             psnr = compare_psnr(output[0], input_GT.cpu().numpy()[0], data_range=1)
             ssim = compare_ssim(output[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
                                 channel_axis=0)
