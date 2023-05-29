@@ -6,14 +6,14 @@
 # ------------------------------------------------------------------------
 import torch
 
-# from basicsr.data import create_dataloader, create_dataset
-from basicsr.models import create_model
-from basicsr.train import parse_options
-from basicsr.utils import FileClient, imfrombytes, img2tensor, padding, tensor2img, imwrite
+# from data import create_dataloader, create_dataset
+from models import create_model
+from train import parse_options
+from utils import FileClient, imfrombytes, img2tensor, padding, tensor2img, imwrite
 
-# from basicsr.utils import (get_env_info, get_root_logger, get_time_str,
+# from utils import (get_env_info, get_root_logger, get_time_str,
 #                            make_exp_dirs)
-# from basicsr.utils.options import dict2str
+# from utils.options import dict2str
 
 
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
