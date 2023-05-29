@@ -82,21 +82,24 @@ def main():
 
                 ## 1. read image
 
-                model.feed_data(data={'lq': input_noisy})
-
-                if model.opt['val'].get('grids', False):
-                    model.grids()
-
-                model.test()
+                # model.feed_data(data={'lq': input_noisy})
+                model.net_g.eval()
+                output = model.g_net = model.net_g(input_noisy)
 
 
-                if model.opt['val'].get('grids', False):
-                    model.grids_inverse()
+                # if model.opt['val'].get('grids', False):
+                #     model.grids()
 
-                visuals = model.get_current_visuals()
-                output = tensor2img([visuals['result']])
+                # model.test()
+                #
+                #
+                # if model.opt['val'].get('grids', False):
+                #     model.grids_inverse()
+                #
+                # visuals = model.get_current_visuals()
+                # output = tensor2img([visuals['result']])
 
-            print("output[0], input_GT.:", output.max(), input_GT.max())
+            print("out:", output.max(), input_GT.max())
 
             psnr = compare_psnr(output, input_GT.cpu().numpy()[0], data_range=1)
             ssim = compare_ssim(output, input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
