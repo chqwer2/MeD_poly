@@ -29,12 +29,12 @@ input_dir = "../../../../data/SIDD_sRGB/"
 filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
 img = sio.loadmat(filepath)
 Inoisy = np.float32(np.array(img['ValidationNoisyBlocksSrgb']))
-Inoisy /=255.
+# Inoisy /=255.
 
 filepath = os.path.join(input_dir, 'ValidationGtBlocksSrgb.mat')
 img = sio.loadmat(filepath)
 GT = np.float32(np.array(img['ValidationGtBlocksSrgb']))
-GT /=255.
+# GT /=255.
 
 from tqdm import tqdm
 
