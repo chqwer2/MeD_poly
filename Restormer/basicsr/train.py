@@ -19,6 +19,7 @@ from utils.dist_util import get_dist_info, init_dist
 from utils.options import dict2str, parse
 
 import numpy as np
+import os
 
 def parse_options(is_train=True):
     parser = argparse.ArgumentParser()
@@ -31,6 +32,7 @@ def parse_options(is_train=True):
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
+    os.environ['LOCAL_RANK'] = args.local_rank
     opt = parse(args.opt, is_train=is_train)
 
     # distributed settings
