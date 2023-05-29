@@ -142,7 +142,7 @@ with torch.no_grad():
 
         print('PSNR: ', psnr, 'SSIM: ', ssim)
 
-print("SIDD PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
+print("AVG SIDD PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
 
 
 

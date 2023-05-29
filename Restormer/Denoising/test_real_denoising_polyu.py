@@ -163,8 +163,8 @@ ssim_list = []
 with torch.no_grad():
     for batch_idx, (input_GT, input_noisy) in enumerate(test_dataloader):  # id
 
-        input_noisy = input_noisy.cuda()
-        input_GT = input_GT.cuda()
+        input_noisy = input_noisy.cuda()/255.
+        input_GT = input_GT.cuda()/ 255.
 
         unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
         (B, C, W, H) = input_noisy.shape
@@ -195,7 +195,7 @@ with torch.no_grad():
 
         print('PSNR: ', psnr, 'SSIM: ', ssim)
 
-print("SIDD PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
+print("AVG PolyU PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
 
 
 
