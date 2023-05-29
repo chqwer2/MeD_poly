@@ -107,9 +107,10 @@ def main():
     with torch.no_grad():
         for batch_idx, (input_GT, input_noisy) in enumerate(test_dataloader):  # id
 
-            input_noisy = input_noisy.cuda()
-            input_GT = input_GT.cuda()
-                ## 1. read image
+            input_noisy = input_noisy.float().cuda()
+            input_GT = input_GT.float().cuda()
+
+            ## 1. read image
             (B, C, W, H) = input_noisy.shape
 
             output = torch.zeros_like(input_noisy).cuda()
@@ -129,16 +130,17 @@ def main():
                     output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = clean
 
 
-
+            print('img', output.max(), input_GT.max())
 
             psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
-            ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
+            ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0],
+                                data_range=1, multichannel=True,
                                 channel_axis=0)
 
             psnr_list.append(psnr)
             ssim_list.append(ssim)
 
-            print('PSNR: ', psnr, 'SSIM: ', ssim)
+
 
         print("SIDD PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
 
