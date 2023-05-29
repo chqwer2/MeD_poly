@@ -101,8 +101,8 @@ def main():
 
             print("out:", output.max(), input_GT.max())
 
-            psnr = compare_psnr(output, input_GT.cpu().numpy()[0], data_range=1)
-            ssim = compare_ssim(output, input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
+            psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
+            ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
                                 channel_axis=-1)
 
             psnr_list.append(psnr)
