@@ -161,12 +161,11 @@ ssim_list = []
 
 with torch.no_grad():
     for batch_idx, (input_GT, input_noisy) in enumerate(test_dataloader):  # id
-        print("input_GT:", input_GT.shape)
+        print("input_GT:", input_noisy.shape)
 
         input_noisy = input_noisy.cuda()
         input_GT = input_GT.cuda()
 
-        unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
         (B, C, W, H) = input_noisy.shape
 
         output = torch.zeros_like(input_noisy).to(device)
@@ -180,6 +179,8 @@ with torch.no_grad():
 
                 noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
                 clean = model_restoration(noisy_patch)
+
+                print("clean:", clean.shape)
 
                 output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
                     clean[:, :, pad:-pad, pad:-pad]
