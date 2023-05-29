@@ -121,6 +121,7 @@ def test():
         file_manager = FileManager(output_folder)
 
     file_manager = FileManager(output_folder)
+
     test_dataset = PolyU()
 
 
@@ -184,6 +185,24 @@ if __name__ == '__main__':
     logger.highlight(logger.get_start_msg())
     status = set_status('test')
     denoiser = set_denoiser(checkpoint_path=cfg['pretrained'], cfg=cfg)
+
+
+    from ptflops import get_model_complexity_info
+
+    inp_shape = (3, 256, 256)
+
+    FLOPS = 0
+    macs, params = get_model_complexity_info(denoiser, inp_shape, verbose=False, print_per_layer_stat=True)
+
+    # params = float(params[:-4])
+    # MACs (G) in log scale
+    print(params)
+    macs = float(macs[:-4]) + FLOPS / 10 ** 9
+
+    print('mac', macs, params)
+
+
+
     # status = set_status('test%03d'%cfg['ckpt_epoch'])
     if cfg['self_en']:
         denoiser = lambda *input_data: self_ensemble(denoiser, *input_data)

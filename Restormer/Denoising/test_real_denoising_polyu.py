@@ -78,19 +78,74 @@ print('mac', macs, params)
 
 
 # Process SIDD
-input_dir = "../../../../data/denoising/SIDD"
+from torch.utils.data import Dataset
 
-filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
-img = sio.loadmat(filepath)
-Inoisy = np.float32(np.array(img['ValidationNoisyBlocksSrgb']))
-Inoisy /=255.
+from glob import glob
+from PIL import Image
+import random
+import numpy as np
 
-filepath = os.path.join(input_dir, 'ValidationGtBlocksSrgb.mat')
-img = sio.loadmat(filepath)
-GT = np.float32(np.array(img['ValidationGtBlocksSrgb']))
-GT /=255.
 
-restored = np.zeros_like(Inoisy)
+class PolyU(Dataset):
+    def __init__(self,  **kwargs):
+        super().__init__( **kwargs)
+
+        self.paths_L = glob("../../../../data/denoising/PolyU/gt/*")
+        self.paths_H = glob("../../../../data/denoising/PolyU/noisy/*")
+        self.paths_H.sort()
+        self.paths_L.sort()
+
+        # *255
+
+    def __len__(self):
+        return len(self.paths_H)
+
+    def get_img_by_index(self, index):
+        H_path = self.paths_H[index]
+        L_path = self.paths_L[index].replace("/gt", "/noisy")
+
+        img_H = Image.open(H_path)
+        img_L = Image.open(L_path)
+
+        img_H = np.asarray(img_H).transpose(2, 0, 1)
+        img_L = np.asarray(img_L).transpose(2, 0, 1)
+
+        # (npImg_noisy, (2, 0, 1)) / 255)
+
+        if np.max(img_H) > 1.1:
+            img_H = img_H / 255
+            img_L = img_L / 255
+
+        return img_H, img_L
+
+
+    def __getitem__(self, idx):
+        '''
+        final dictionary shape of data:
+        {'clean', 'syn_noisy', 'real_noisy', 'noisy (any of real[first priority] and syn)', etc}
+        '''
+        # calculate data index
+        data_idx = idx #% self.n_data
+
+        # load data
+        img_H, img_L = self.get_img_by_index(data_idx)
+
+        # patches = self.unfold(img_L)  #img_L.unfold(1, size, stride).unfold(2, size, stride).unfold(3, size, stride)
+        # print(patches.shape)
+
+
+
+        # print("img_H:", img_H.shape)
+        return 0, \
+            np.array(img_L, dtype=np.float32),  np.array(img_H, dtype=np.float32), idx
+
+
+D = PolyU()
+from torch.utils.data import DataLoader
+
+test_dataloader = DataLoader(D, batch_size=1,
+                             shuffle=False, num_workers=8, pin_memory=True)  #
+
 
 def padr(img):
     pad = 20
@@ -106,10 +161,10 @@ ssim_list = []
 
 
 with torch.no_grad():
-    for i in tqdm(range(Inoisy.shape[0])):  # id
+    for batch_idx, (input_GT, input_noisy) in enumerate(test_dataloader):  # id
 
-        input_noisy = torch.from_numpy(Inoisy[i]).unsqueeze(0).permute(0,3,1,2).cuda()
-        input_GT = torch.from_numpy(GT[i]).unsqueeze(0).permute(0,3,1,2).cuda()
+        input_noisy = input_noisy.cuda()
+        input_GT = input_GT.cuda()
 
         unfold = torch.nn.Unfold(kernel_size=256, padding=2, stride=256)
         (B, C, W, H) = input_noisy.shape

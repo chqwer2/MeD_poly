@@ -15,47 +15,98 @@ from basicsr.utils import FileClient, imfrombytes, img2tensor, padding, tensor2i
 #                            make_exp_dirs)
 # from basicsr.utils.options import dict2str
 
+
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr
+from skimage.metrics import structural_similarity as compare_ssim
+
+import numpy as np
+import os
+import scipy.io as sio
+
+# SIDD
+input_dir = "../../../../data/denoising/SIDD"
+
+filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
+img = sio.loadmat(filepath)
+Inoisy = np.float32(np.array(img['ValidationNoisyBlocksSrgb']))
+Inoisy /=255.
+
+filepath = os.path.join(input_dir, 'ValidationGtBlocksSrgb.mat')
+img = sio.loadmat(filepath)
+GT = np.float32(np.array(img['ValidationGtBlocksSrgb']))
+GT /=255.
+
+from tqdm import tqdm
+
+
 def main():
+
     # parse options, set distributed setting, set ramdom seed
     opt = parse_options(is_train=False)
     opt['num_gpu'] = torch.cuda.device_count()
-
-    img_path = opt['img_path'].get('input_img')
-    output_path = opt['img_path'].get('output_img')
-
-
-    ## 1. read image
-    file_client = FileClient('disk')
-
-    img_bytes = file_client.get(img_path, None)
-    try:
-        img = imfrombytes(img_bytes, float32=True)
-    except:
-        raise Exception("path {} not working".format(img_path))
-
-    img = img2tensor(img, bgr2rgb=True, float32=True)
-
-
 
     ## 2. run inference
     opt['dist'] = False
     model = create_model(opt)
 
-    model.feed_data(data={'lq': img.unsqueeze(dim=0)})
 
-    if model.opt['val'].get('grids', False):
-        model.grids()
 
-    model.test()
+    inp_shape = (3, 256, 256)
 
-    if model.opt['val'].get('grids', False):
-        model.grids_inverse()
+    # pip install ptflops
+    from ptflops import get_model_complexity_info
+    FLOPS = 0
+    macs, params = get_model_complexity_info(model, inp_shape, verbose=False, print_per_layer_stat=True)
 
-    visuals = model.get_current_visuals()
-    sr_img = tensor2img([visuals['result']])
-    imwrite(sr_img, output_path)
+    # params = float(params[:-4])
+    # MACs (G) in log scale
+    print(params)
+    macs = float(macs[:-4]) + FLOPS / 10 ** 9
 
-    print(f'inference {img_path} .. finished. saved to {output_path}')
+    print('mac', macs, params)
+
+    psnr_list = []
+    ssim_list = []
+
+
+    # SIDD
+    with torch.no_grad():
+        for i in tqdm(range(Inoisy.shape[0])):  # id
+
+
+            ## 1. read image
+
+            # img = img2tensor(img, bgr2rgb=True, float32=True)
+            input_noisy = torch.from_numpy(Inoisy[i]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
+            input_GT = torch.from_numpy(GT[i]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
+
+
+
+            model.feed_data(data={'lq': input_noisy})
+
+            if model.opt['val'].get('grids', False):
+                model.grids()
+
+            model.test()
+
+
+            if model.opt['val'].get('grids', False):
+                model.grids_inverse()
+
+            visuals = model.get_current_visuals()
+            output = tensor2img([visuals['result']])
+
+            psnr = compare_psnr(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1)
+            ssim = compare_ssim(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1, multichannel=True,
+                                channel_axis=-1)
+
+            psnr_list.append(psnr)
+            ssim_list.append(ssim)
+
+            print('PSNR: ', psnr, 'SSIM: ', ssim)
+
+        print("SIDD PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
+
 
 if __name__ == '__main__':
     main()

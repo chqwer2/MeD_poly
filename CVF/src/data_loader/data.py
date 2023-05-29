@@ -79,11 +79,6 @@ class PolyU(Dataset):
         # load data
         img_H, img_L = self.get_img_by_index(data_idx)
 
-
-
-        size = 256    # patch size
-        stride = 256  # patch stride
-
         # patches = self.unfold(img_L)  #img_L.unfold(1, size, stride).unfold(2, size, stride).unfold(3, size, stride)
         # print(patches.shape)
 
