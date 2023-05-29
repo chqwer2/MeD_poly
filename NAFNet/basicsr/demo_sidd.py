@@ -29,12 +29,12 @@ input_dir = "../../../../data/SIDD_sRGB/"
 filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
 img = sio.loadmat(filepath)
 Inoisy = np.float32(np.array(img['ValidationNoisyBlocksSrgb']))
-# Inoisy /=255.
+Inoisy /=255.
 
 filepath = os.path.join(input_dir, 'ValidationGtBlocksSrgb.mat')
 img = sio.loadmat(filepath)
 GT = np.float32(np.array(img['ValidationGtBlocksSrgb']))
-# GT /=255.
+GT /=255.
 
 from tqdm import tqdm
 
@@ -98,8 +98,8 @@ def main():
 
             print("output[0], input_GT.:", output.max(), input_GT.max())
 
-            psnr = compare_psnr(output, input_GT.cpu().numpy()[0], data_range=255)
-            ssim = compare_ssim(output, input_GT.cpu().numpy()[0], data_range=255, multichannel=True,
+            psnr = compare_psnr(output, input_GT.cpu().numpy()[0], data_range=1)
+            ssim = compare_ssim(output, input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
                                 channel_axis=-1)
 
             psnr_list.append(psnr)
