@@ -185,7 +185,7 @@ with torch.no_grad():
 
         # output = output[:, :, pad:-pad, pad:-pad]
 
-        print("Max: output", torch.max(output), "input_GT", torch.max(input_GT))
+        # print("Max: output", torch.max(output), "input_GT", torch.max(input_GT))
 
         psnr = compare_psnr(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1)

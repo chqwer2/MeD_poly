@@ -24,7 +24,7 @@ import os
 import scipy.io as sio
 
 # SIDD
-input_dir = "../../../../data/denoising/SIDD"
+input_dir = "../../../../../data/SIDD_sRGB/"
 
 filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
 img = sio.loadmat(filepath)
@@ -72,33 +72,29 @@ def main():
     # SIDD
     with torch.no_grad():
         for i in tqdm(range(Inoisy.shape[0])):  # id
+            for j in tqdm(range(Inoisy.shape[1])):  # id
+                input_noisy = torch.from_numpy(Inoisy[i, j]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
+                input_GT = torch.from_numpy(GT[i, j]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
+
+                ## 1. read image
+
+                model.feed_data(data={'lq': input_noisy})
+
+                if model.opt['val'].get('grids', False):
+                    model.grids()
+
+                model.test()
 
 
-            ## 1. read image
+                if model.opt['val'].get('grids', False):
+                    model.grids_inverse()
 
-            # img = img2tensor(img, bgr2rgb=True, float32=True)
-            input_noisy = torch.from_numpy(Inoisy[i]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
-            input_GT = torch.from_numpy(GT[i]).unsqueeze(0).permute(0, 3, 1, 2).cuda()
+                visuals = model.get_current_visuals()
+                output = tensor2img([visuals['result']])
 
-
-
-            model.feed_data(data={'lq': input_noisy})
-
-            if model.opt['val'].get('grids', False):
-                model.grids()
-
-            model.test()
-
-
-            if model.opt['val'].get('grids', False):
-                model.grids_inverse()
-
-            visuals = model.get_current_visuals()
-            output = tensor2img([visuals['result']])
-
-            psnr = compare_psnr(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1)
-            ssim = compare_ssim(output.cpu().numpy(), input_GT.cpu().numpy(), data_range=1, multichannel=True,
-                                channel_axis=-1)
+            psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
+            ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
+                                channel_axis=0)
 
             psnr_list.append(psnr)
             ssim_list.append(ssim)
