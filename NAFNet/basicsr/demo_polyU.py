@@ -127,7 +127,7 @@ def main():
                 ## 1. read image
             (B, C, W, H) = input_noisy.shape
 
-            output = torch.zeros_like(input_noisy).to(device)
+            output = torch.zeros_like(input_noisy).cuda()
 
             W_st = W // 256 + 1
             H_st = H // 256 + 1
@@ -137,21 +137,9 @@ def main():
                 for j in range(H_st):
                     # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
                     noisy_patch = input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
-                    # print("noisy_patch :", noisy_patch .shape)
 
-                    model.feed_data(data={'lq': input_noisy})
-
-                    if model.opt['val'].get('grids', False):
-                        model.grids()
-
-                    model.test()
-
-
-                    if model.opt['val'].get('grids', False):
-                        model.grids_inverse()
-
-                    visuals = model.get_current_visuals()
-                    clean = tensor2img([visuals['result']])
+                    model.net_g.eval()
+                    clean = model.net_g(noisy_patch)
 
                     output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = clean
 
