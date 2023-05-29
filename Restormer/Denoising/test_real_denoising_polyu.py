@@ -169,6 +169,7 @@ with torch.no_grad():
         (B, C, W, H) = input_noisy.shape
 
         output = torch.zeros_like(input_noisy).to(device)
+
         W_st = W // 256 + 1
         H_st = H // 256 + 1
         pad = 20
@@ -177,16 +178,20 @@ with torch.no_grad():
         for i in range(W_st):
             for j in range(H_st):
 
-                noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
+                # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
+                noisy_patch = input_noisy
 
                 clean = model_restoration(noisy_patch)
 
 
                 output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
-                    clean[:, :, pad:-pad, pad:-pad]
+                    clean # [:, :, pad:-pad, pad:-pad]
 
-        psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
-        ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1, multichannel=True,
+        psnr = compare_psnr(output.cpu().numpy()[0],
+                            input_GT.cpu().numpy()[0], data_range=1)
+        ssim = compare_ssim(output.cpu().numpy()[0],
+                            input_GT.cpu().numpy()[0], data_range=1,
+                            multichannel=True,
                             channel_axis=0)
 
         psnr_list.append(psnr)
