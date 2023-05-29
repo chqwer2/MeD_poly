@@ -130,12 +130,7 @@ class PolyU(Dataset):
         # load data
         img_H, img_L = self.get_img_by_index(data_idx)
 
-        # patches = self.unfold(img_L)  #img_L.unfold(1, size, stride).unfold(2, size, stride).unfold(3, size, stride)
-        # print(patches.shape)
 
-
-
-        # print("img_H:", img_H.shape)
         return np.array(img_H, dtype=np.float32),  np.array(img_L, dtype=np.float32)
 
 
@@ -180,16 +175,21 @@ with torch.no_grad():
 
                 # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
                 noisy_patch = input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
-                print("noisy_patch :", noisy_patch .shape)
+                # print("noisy_patch :", noisy_patch .shape)
 
                 clean = model_restoration(noisy_patch)
 
 
-                output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
-                    clean # [:, :, pad:-pad, pad:-pad]
+                output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = clean
+                # [:, :, pad:-pad, pad:-pad]
+
+        # output = output[:, :, pad:-pad, pad:-pad]
+
+        print("Max: output", torch.max(output), "input_GT", torch.max(input_GT))
 
         psnr = compare_psnr(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1)
+
         ssim = compare_ssim(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1,
                             multichannel=True,
