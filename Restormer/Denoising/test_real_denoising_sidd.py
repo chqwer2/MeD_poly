@@ -78,7 +78,7 @@ print('mac', macs, params)
 
 
 # Process SIDD
-input_dir = "../../../../data/denoising/SIDD"
+input_dir = "../../../../../data/SIDD_sRGB/"
 
 filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
 img = sio.loadmat(filepath)
