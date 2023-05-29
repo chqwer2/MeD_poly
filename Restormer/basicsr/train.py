@@ -32,7 +32,7 @@ def parse_options(is_train=True):
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
-    os.environ['RANK'] = args.local_rank
+    os.environ['RANK'] = str(args.local_rank)
     opt = parse(args.opt, is_train=is_train)
 
     # distributed settings
