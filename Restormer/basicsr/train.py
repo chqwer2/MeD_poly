@@ -30,6 +30,8 @@ def parse_options(is_train=True):
         default='none',
         help='job launcher')
     # parser.add_argument('--local_rank', type=int, default=0)
+    # os.environ['LOCAL_RANK']
+    
     
     args = parser.parse_args()
     opt = parse(args.opt, is_train=is_train)

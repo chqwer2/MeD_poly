@@ -6,6 +6,11 @@ python -m torch.distributed.launch --nproc_per_node=1 --master_port=4321 basicsr
 
 
 
+python basicsr/train.py -opt Denoising/Options/RealDenoising_Restormer.yml --launcher pytorch
+
+
+
+
 
 
 
