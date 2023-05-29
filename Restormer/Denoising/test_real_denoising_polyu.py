@@ -179,7 +179,8 @@ with torch.no_grad():
             for j in range(H_st):
 
                 # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
-                noisy_patch = input_noisy
+                noisy_patch = input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
+                print("noisy_patch :", noisy_patch .shape)
 
                 clean = model_restoration(noisy_patch)
 
