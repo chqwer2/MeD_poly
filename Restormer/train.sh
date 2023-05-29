@@ -14,7 +14,7 @@ python basicsr/train.py -opt Denoising/Options/RealDenoising_Restormer.yml --lau
 
 
 
-
+python basicsr/train.py -opt Denoising/Options/RealDenoising_Restormer.yml
 
 
 
