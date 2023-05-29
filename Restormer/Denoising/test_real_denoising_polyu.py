@@ -162,6 +162,7 @@ ssim_list = []
 
 with torch.no_grad():
     for batch_idx, (input_GT, input_noisy) in enumerate(test_dataloader):  # id
+        print("input_GT:", input_GT.shape)
 
         input_noisy = input_noisy.cuda()/255.
         input_GT = input_GT.cuda()/ 255.
