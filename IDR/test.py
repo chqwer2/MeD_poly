@@ -251,11 +251,9 @@ if __name__ == '__main__':
         os.makedirs(args.res_dir)
 
     # set testing datasets
-    if 'gray' in args.ntype:
-        test_data_path_set = [args.root + 'BSD68']
-    else:
-        test_data_path_set = [args.root + 'kodak',
-                              args.root + 'BSDS300/all', ]
+
+    test_data_path_set = ["/bask/projects/j/jiaoj-3d-vision/Hao/data/denoising/CBSD68-dataset/CBSD68/original_png"]
+
 
     # model
     ch = 1 if 'gray' in args.ntype else 3
