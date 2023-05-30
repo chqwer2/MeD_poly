@@ -376,13 +376,13 @@ def main(_):
   FLOPS = 0
   
   print(model)
-  
-  macs, params = get_model_complexity_info(model, inp_shape, verbose=False, print_per_layer_stat=True)
+  import maxim
+  macs, paramss = get_model_complexity_info(maxim.MAXIM(**model_configs), inp_shape, verbose=False, print_per_layer_stat=True)
 
-  print(params)
+  print(paramss)
   macs = float(macs[:-4]) + FLOPS / 10 ** 9
 
-  print('mac', macs, params)
+  print('mac', macs, paramss)
     
     
   psnr_all = []
@@ -415,6 +415,8 @@ def main(_):
 
     # handle multi-stage outputs, obtain the last scale output of last stage
     preds = model.apply({'params': flax.core.freeze(params)}, input_img)
+    
+    
     if isinstance(preds, list):
       preds = preds[-1]
       if isinstance(preds, list):
