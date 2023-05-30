@@ -203,7 +203,7 @@ with torch.no_grad():
         i = input_GT.cpu().numpy()[0]
         print("o.shape", o.shape, "i.shape", i.shape)
 
-        ssim = compare_ssim(o, i, data_range=1, multichannel=True, channel_axis=0)
+        ssim = compare_ssim(o, i, data_range=1, channel_axis=0)  # multichannel=True,
 
         psnr_list.append(psnr)
         ssim_list.append(ssim)
