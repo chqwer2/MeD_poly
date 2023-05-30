@@ -57,7 +57,7 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
         # forward
         print("data[arg] for arg in cfg['model_input']:", [arg for arg in cfg['model_input']])
 
-        input_data = [data[arg] for arg in cfg['model_input']]
+        input_data = [data['noisy']]  #data[arg] for arg in cfg['model_input']]
 
         (B, C, W, H) = input_data[0].shape
         output = torch.zeros_like(input_data[0]).to('cuda')
@@ -66,29 +66,31 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
         pad = 20
 
 
-        for i in range(W_st):
-            for j in range(H_st):
-                input = padr(input_data[0][:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
-
-                with torch.no_grad():
-                    clean = denoiser(*[input])
-
-                output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
-                    clean[:, :, pad:-pad, pad:-pad]
-
-
-        denoised_image = output
-        # print(denoised_image.shape)
-
-        # add constant and floor (if floor is on)
-        denoised_image += add_con
-        if floor: denoised_image = torch.floor(denoised_image)
+        # for i in range(W_st):
+        #     for j in range(H_st):
+        #         input = padr(input_data[0][:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
+        #
+        #         with torch.no_grad():
+        #             clean = denoiser(*[input])
+        #
+        #         output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = \
+        #             clean[:, :, pad:-pad, pad:-pad]
+        #
+        #
+        # denoised_image = output
+        # # print(denoised_image.shape)
+        #
+        # # add constant and floor (if floor is on)
+        # denoised_image += add_con
+        # if floor: denoised_image = torch.floor(denoised_image)
 
 
         # evaluation
         if 'clean' in data:
-            psnr_value = psnr(denoised_image, data['clean'])
-            ssim_value = ssim(denoised_image, data['clean'])
+            # psnr_value = psnr(denoised_image, data['clean'])
+            # ssim_value = ssim(denoised_image, data['clean'])
+            psnr_value = psnr(data['noisy'], data['clean'])
+            ssim_value = ssim(data['noisy'], data['clean'])
 
             psnr_sum += psnr_value
             ssim_sum += ssim_value
