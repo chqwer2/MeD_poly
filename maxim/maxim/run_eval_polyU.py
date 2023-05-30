@@ -317,6 +317,13 @@ def make_shape_even(image):
   return image
 
 
+import scipy.io as sio
+from pdb import set_trace as stx
+
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr
+from skimage.metrics import structural_similarity as compare_ssim
+
+
 def main(_):
   params = get_params(FLAGS.ckpt_path)
 
@@ -324,18 +331,36 @@ def main(_):
     os.makedirs(FLAGS.output_dir, exist_ok=True)
 
   # sorted is important for continuning an inference job.
-  filepath = sorted(os.listdir(os.path.join(FLAGS.input_dir, 'input')))
-  input_filenames = [
-      os.path.join(FLAGS.input_dir, 'input', x)
-      for x in filepath
-      if is_image_file(x)
-  ]
-  if FLAGS.has_target:
-    target_filenames = [
-        os.path.join(FLAGS.input_dir, 'target', x)
-        for x in filepath
-        if is_image_file(x)
-    ]
+  input_dir = "../../../../../data/denoising/PolyU/gt"
+
+  filepath = sorted(os.listdir(input_dir))
+
+
+
+
+  # input_filenames = [
+  #     os.path.join(FLAGS.input_dir, 'input', x)
+  #     for x in filepath
+  #     if is_image_file(x)
+  # ]
+
+  from glob import glob
+
+  input_filenames = glob("../../../../../data/denoising/PolyU/gt/*")
+  input_filenames = sorted(input_filenames)
+
+  FLAGS.has_target = True
+
+  target_filenames = glob("../../../../../data/denoising/PolyU/noisy/*")
+  target_filenames = sorted(target_filenames)
+
+
+  # if FLAGS.has_target:
+  #   target_filenames = [
+  #       os.path.join(FLAGS.input_dir, 'target', x)
+  #       for x in filepath
+  #       if is_image_file(x)
+  #   ]
   num_images = len(input_filenames)
 
   model_mod = importlib.import_module(f'maxim.models.{_MODEL_FILENAME}')
@@ -344,8 +369,11 @@ def main(_):
   model = model_mod.Model(**model_configs)
 
   psnr_all = []
+  ssim_all = []
+
 
   def _process_file(i):
+
     print(f'Processing {i + 1} / {num_images}...')
     input_file = input_filenames[i]
     input_img = np.asarray(Image.open(input_file).convert('RGB'),
@@ -389,30 +417,43 @@ def main(_):
     w_end = w_start + width
     preds = preds[h_start:h_end, w_start:w_end, :]
 
-    # print PSNR scores
-    if FLAGS.has_target:
-      psnr = calculate_psnr(
-          target_img * 255., preds * 255., crop_border=0, test_y_channel=False)
-      print(f'{i}th image: psnr = {psnr:.4f}')
-    else:
-      psnr = -1
 
-    # save files
-    basename = os.path.basename(input_file)
-    if FLAGS.save_images:
-      save_pth = os.path.join(FLAGS.output_dir, basename)
-      save_img(preds, save_pth)
 
-    return psnr
+    psnr = compare_psnr(preds.cpu().numpy()[0],
+                        target_img.cpu().numpy()[0], data_range=1)
+
+    ssim = compare_ssim(preds.cpu().numpy()[0],
+                        target_img.cpu().numpy()[0], data_range=1,
+                        multichannel=True,
+                        channel_axis=0)
+
+    print(f'{i}th image: psnr = {psnr:.4f}, ssim = {ssim:.4f}')
+
+    # else:
+    #   psnr = -1
+
+    # # save files
+    # basename = os.path.basename(input_file)
+    # if FLAGS.save_images:
+    #   save_pth = os.path.join(FLAGS.output_dir, basename)
+    #   save_img(preds, save_pth)
+
+    return psnr, ssim
 
   for i in range(num_images):
-    psnr = _process_file(i)
+    psnr, ssim = _process_file(i)
     psnr_all.append(psnr)
+    ssim_all.append(ssim)
 
   psnr_all = np.asarray(psnr_all)
+  ssim_all = np.asarray(ssim_all)
 
-  print(f'average psnr = {np.sum(psnr_all)/num_images:.4f}')
+  print(f'average psnr = {np.sum(psnr_all) / num_images:.4f}')
   print(f'std psnr = {np.std(psnr_all):.4f}')
+  print(f'average ssim = {np.sum(ssim_all) / num_images:.4f}')
+  print(f'std ssim = {np.std(ssim_all):.4f}')
+
+
 
 
 if __name__ == '__main__':

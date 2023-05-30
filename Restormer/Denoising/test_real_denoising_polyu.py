@@ -112,6 +112,8 @@ class PolyU(Dataset):
 
         # (npImg_noisy, (2, 0, 1)) / 255)
 
+        print("img_L max:", np.max(img_L))
+
         if np.max(img_H) > 1.1:
             img_H = img_H / 255
             img_L = img_L / 255
@@ -162,6 +164,7 @@ with torch.no_grad():
         input_GT = input_GT.cuda()
 
         (B, C, W, H) = input_noisy.shape
+        print("input_noisy.shape:", input_noisy.shape)
 
         output = torch.zeros_like(input_noisy).to(device)
 
@@ -175,17 +178,17 @@ with torch.no_grad():
 
                 # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
                 noisy_patch = input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
-                # print("noisy_patch :", noisy_patch .shape)
+                print("noisy_patch :", noisy_patch.shape)
 
                 clean = model_restoration(noisy_patch)
 
 
                 output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = clean
-                # [:, :, pad:-pad, pad:-pad]
 
-        # output = output[:, :, pad:-pad, pad:-pad]
 
-        # print("Max: output", torch.max(output), "input_GT", torch.max(input_GT))
+
+        print("Max: output", torch.max(output), "input_GT", torch.max(input_GT),
+              "input_noisy", torch.max(input_noisy))
 
         psnr = compare_psnr(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1)
@@ -197,7 +200,6 @@ with torch.no_grad():
 
         psnr_list.append(psnr)
         ssim_list.append(ssim)
-
 
 
         print('PSNR: ', psnr, 'SSIM: ', ssim)

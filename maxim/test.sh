@@ -6,11 +6,16 @@
 
 # train on SIDD
 
-python3 maxim/run_eval.py --task Denoising \
+python3 maxim/run_eval_polyU.py --task Denoising \
   --ckpt_path maxim_ckpt_Denoising_SIDD_checkpoint.npz \
   --input_dir maxim/images/Denoising \
   --output_dir maxim/images/Results --has_target=False
 
+
+python3 maxim/run_eval_sidd.py --task Denoising \
+  --ckpt_path maxim_ckpt_Denoising_SIDD_checkpoint.npz \
+  --input_dir maxim/images/Denoising \
+  --output_dir maxim/images/Results --has_target=False
 
 
 
