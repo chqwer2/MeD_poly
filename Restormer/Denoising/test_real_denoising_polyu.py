@@ -191,17 +191,11 @@ with torch.no_grad():
                 output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = clean
 
 
-
-        print("Max: output", torch.max(output), "input_GT", torch.max(input_GT),
-              "input_noisy", torch.max(input_noisy),
-              input_GT.cpu().numpy()[0].shape, output.cpu().numpy()[0].shape)
-
-
         psnr = compare_psnr(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1)
         o = output.cpu().numpy()[0]
         i = input_GT.cpu().numpy()[0]
-        print("o.shape", o.shape, "i.shape", i.shape)
+        # print("o.shape", o.shape, "i.shape", i.shape)
 
         ssim = compare_ssim(o, i, data_range=1, channel_axis=0)  # multichannel=True,
 
