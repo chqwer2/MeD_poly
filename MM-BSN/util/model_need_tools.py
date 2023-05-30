@@ -97,29 +97,30 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
             count += 1
 
         # image save
-        if img_save:
-            # to cpu
-            if 'clean' in data:
-                clean_img = data['clean'].squeeze(0).cpu()
-            if 'real_noisy' in cfg['model_input']:
-                noisy_img = data['real_noisy']
-            elif 'syn_noisy' in cfg['model_input']:
-                noisy_img = data['syn_noisy']
-            elif 'noisy' in cfg['model_input']:
-                noisy_img = data['noisy']
-            else:
-                noisy_img = None
-            if noisy_img is not None: noisy_img = noisy_img.squeeze(0).cpu()
-            denoi_img = denoised_image.squeeze(0).cpu()
-
-            # write psnr value on file name
-            denoi_name = '%04d_DN_%.2f' % (idx, psnr_value) if 'clean' in data else '%04d_DN' % idx
-
-            # imwrite
-            if 'clean' in data:         file_manager.save_img_tensor(img_save_path, '%04d_CL' % idx, clean_img)
-            if noisy_img is not None: file_manager.save_img_tensor(img_save_path, '%04d_N' % idx, noisy_img)
-            file_manager.save_img_tensor(img_save_path, denoi_name, denoi_img)
-            # procedure log msg
+        # if img_save:
+        #     # to cpu
+        #     if 'clean' in data:
+        #         clean_img = data['clean'].squeeze(0).cpu()
+        #     if 'real_noisy' in cfg['model_input']:
+        #         noisy_img = data['real_noisy']
+        #     elif 'syn_noisy' in cfg['model_input']:
+        #         noisy_img = data['syn_noisy']
+        #     elif 'noisy' in cfg['model_input']:
+        #         noisy_img = data['noisy']
+        #     else:
+        #         noisy_img = None
+        #     if noisy_img is not None: noisy_img = noisy_img.squeeze(0).cpu()
+        #     denoi_img = denoised_image.squeeze(0).cpu()
+        #
+        #     # write psnr value on file name
+        #     denoi_name = '%04d_DN_%.2f' % (idx, psnr_value) if 'clean' in data else '%04d_DN' % idx
+        #
+        #     # imwrite
+        #     if 'clean' in data:         file_manager.save_img_tensor(img_save_path, '%04d_CL' % idx, clean_img)
+        #     if noisy_img is not None: file_manager.save_img_tensor(img_save_path, '%04d_N' % idx, noisy_img)
+        #     file_manager.save_img_tensor(img_save_path, denoi_name, denoi_img)
+        #     # procedure log msg
+        #
         if info:
             if 'clean' in data:
                 logger.note('[%s] testing... %04d/%04d. PSNR : %.2f dB' % (
