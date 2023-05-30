@@ -368,6 +368,20 @@ def main(_):
   model_configs.variant = _MODEL_VARIANT_DICT[FLAGS.task]
   model = model_mod.Model(**model_configs)
 
+  
+  from ptflops import get_model_complexity_info
+
+  inp_shape = (3, 256, 256)
+
+  FLOPS = 0
+  macs, params = get_model_complexity_info(model, inp_shape, verbose=False, print_per_layer_stat=True)
+
+  print(params)
+  macs = float(macs[:-4]) + FLOPS / 10 ** 9
+
+  print('mac', macs, params)
+    
+    
   psnr_all = []
   ssim_all = []
 
