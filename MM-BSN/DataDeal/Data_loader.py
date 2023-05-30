@@ -139,7 +139,7 @@ class PolyU(RealDataSet):
 
 
     def _scan(self):
-        self.dataset_path = "../../../../data/denoising/PolyU"
+
         self.paths_L = glob("../../../../data/denoising/PolyU/noisy/*")
         self.paths_H = glob("../../../../data/denoising/PolyU/gt/*")
         self.paths_H.sort()
@@ -180,7 +180,7 @@ class PolyU(RealDataSet):
 
         img_H, img_L = self.get_img_by_index(data_idx)
 
-        clean_img =  torch.from_numpy(img_H.astype(np.float32))
+        clean_img = torch.from_numpy(img_H.astype(np.float32))
         noisy_img = torch.from_numpy(img_H.astype(np.float32))
 
         return {'clean': clean_img, 'real_noisy': noisy_img }

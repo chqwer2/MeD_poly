@@ -55,16 +55,15 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
                 data[key] = data[key].cuda()
 
         # forward
-        input_data = [data[arg] for arg in cfg['model_input']]
+        print("data[arg] for arg in cfg['model_input']:", [data[arg] for arg in cfg['model_input']])
 
-        print("input_data:", input_data[0].shape)
+        input_data = [data[arg] for arg in cfg['model_input']]
 
         (B, C, W, H) = input_data[0].shape
         output = torch.zeros_like(input_data[0]).to('cuda')
         W_st = W // 256 + 1
         H_st = H // 256 + 1
         pad = 20
-
 
 
         for i in range(W_st):
