@@ -334,7 +334,7 @@ def main(_):
     os.makedirs(FLAGS.output_dir, exist_ok=True)
 
   # Process SIDD
-  input_dir = "../../../../../data/SIDD_sRGB/"
+  input_dir = "../../../../data/SIDD_sRGB/"
 
   filepath = os.path.join(input_dir, 'ValidationNoisyBlocksSrgb.mat')
   img = sio.loadmat(filepath)

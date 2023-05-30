@@ -331,7 +331,7 @@ def main(_):
     os.makedirs(FLAGS.output_dir, exist_ok=True)
 
   # sorted is important for continuning an inference job.
-  input_dir = "../../../../../data/denoising/PolyU/gt"
+  input_dir = "../../../../data/denoising/PolyU/gt"
 
   filepath = sorted(os.listdir(input_dir))
 
