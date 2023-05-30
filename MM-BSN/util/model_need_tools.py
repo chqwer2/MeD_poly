@@ -159,7 +159,7 @@ def set_module(cfg):
 
     from ptflops import get_model_complexity_info
 
-    inp_shape = (3, 256, 256)
+    inp_shape = (3, 255, 255)
 
     FLOPS = 0
     macs, params = get_model_complexity_info(module['denoiser'], inp_shape, verbose=False, print_per_layer_stat=True)
