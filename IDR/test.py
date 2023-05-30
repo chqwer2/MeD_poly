@@ -193,7 +193,7 @@ def test(args, net, test_data_path_set):
                 if args.zero_mean:
                     noisy = noisy - 0.5
 
-                print('\rprocess', idx, len(data_list), item.split('/')[-1], gt.shape, args.ntype, end='')
+                # print('\rprocess', idx, len(data_list), item.split('/')[-1], gt.shape, args.ntype, end='')
                 denoised = model_forward(net, noisy)
 
                 denoised = denoised + (0.5 if args.zero_mean else 0)
@@ -203,12 +203,13 @@ def test(args, net, test_data_path_set):
                 noisy = np.clip(noisy * 255.0 + 0.5, 0, 255).astype(np.uint8)
 
                 # save PSNR
-                print("denoised, gt:", denoised.shape, gt.shape)
+                # print("denoised, gt:", denoised.shape, gt.shape)
                 temp_psnr = compare_psnr(denoised, gt, data_range=255)
                 temp_ssim = compare_ssim(denoised, gt, data_range=255, channel_axis=-1)
 
                 res['psnr'].append(temp_psnr)
                 res['ssim'].append(temp_ssim)
+                print("psnr:", temp_psnr, " ssim:", temp_psnr)
 
                 if args.save_img:
                     filename = item.split('/')[-1].split('.')[0] + '_%s' % args.ntype
