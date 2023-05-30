@@ -208,8 +208,6 @@ print("AVG PolyU PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
 
 
 
-# PolyU
-
 
 
 # save denoised data
