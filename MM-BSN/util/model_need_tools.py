@@ -17,6 +17,7 @@ def padr(img):
 
     return img_pad
 
+
 @torch.no_grad()
 def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0., floor=False, img_save=True, img_save_path=None, info=True, logger=None, status=None):
     '''

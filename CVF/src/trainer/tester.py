@@ -125,7 +125,7 @@ class Test(BaseTrainer):
 
                 noise_w_normal = (noise_w-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))/(torch.max(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1)-torch.min(noise_w.view(size),-1)[0].unsqueeze(-1).unsqueeze(-1))
 
-                print("input_GT:", input_GT.shape, output.shape)
+
 
                 # if save==True:
                     # for i in range(input_noisy.shape[0]):
@@ -161,7 +161,7 @@ class Test(BaseTrainer):
                     elif met.__name__=="ssim":
                         ssim = met(input_GT.to(self.device),
                                   torch.clamp(output, min=0, max=1))
-                        print("ssim:", ssim)
+
                         self.test_metrics.update('ssim', ssim )
 
                 self.writer.close()
