@@ -112,7 +112,7 @@ def add_noise(clean, ntype, sigma=None):
     img = img1.clone()
     print("img max:", torch.max(img))
 
-    if 'gaussian' in ntype:
+    if ntype == "gaussian":
         noisy = clean + np.random.normal(0, sigma, clean.shape)
 
     elif ntype == "poisson":
