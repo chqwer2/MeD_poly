@@ -34,12 +34,13 @@ def random_rotation(image, angle):
 
 from glob import glob
 
-class PolyU(Dataset):
-    def __init__(self,  **kwargs):
-        super().__init__( **kwargs)
 
-        self.paths_L = glob("../../../../../data/denoising/PolyU/noisy/*")
-        self.paths_H = glob("../../../../../data/denoising/PolyU/gt/*")
+class PolyU(Dataset):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.paths_L = glob("../../../../data/denoising/PolyU/noisy/*")
+        self.paths_H = glob("../../../../data/denoising/PolyU/gt/*")
         self.paths_H.sort()
         self.paths_L.sort()
 
@@ -50,9 +51,7 @@ class PolyU(Dataset):
 
     def get_img_by_index(self, index):
         H_path = self.paths_H[index]
-        L_path = self.paths_L[index]#.replace("/gt", "/noisy")
-
-        # print("L_path:", L_path)
+        L_path = self.paths_H[index].replace("/gt", "/noisy")
 
         img_H = Image.open(H_path)
         img_L = Image.open(L_path)
@@ -61,8 +60,6 @@ class PolyU(Dataset):
         img_L = np.asarray(img_L).transpose(2, 0, 1)
 
         # (npImg_noisy, (2, 0, 1)) / 255)
-
-        # print("img_L max:", np.max(img_L)) # 255
 
         if np.max(img_H) > 1.1:
             img_H = img_H / 255
@@ -82,11 +79,16 @@ class PolyU(Dataset):
         # load data
         img_H, img_L = self.get_img_by_index(data_idx)
 
+        # patches = self.unfold(img_L)  #img_L.unfold(1, size, stride).unfold(2, size, stride).unfold(3, size, stride)
+        # print(patches.shape)
 
-        return np.array(img_H, dtype=np.float32),  np.array(img_L, dtype=np.float32)
 
 
-from torch.utils.data import DataLoader
+        # print("img_H:", img_H.shape)
+        return 0, \
+            np.array(img_L, dtype=np.float32),  np.array(img_H, dtype=np.float32), idx
+
+
 
 class benchmark_data(Dataset):
 
