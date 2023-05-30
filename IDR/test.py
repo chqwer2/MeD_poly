@@ -1,5 +1,6 @@
 import argparse
 
+import torch
 import torch.nn.functional as F
 # from skimage.measure import compare_psnr, compare_ssim
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
@@ -107,7 +108,7 @@ def speckle(img, sigma):
 def add_noise(clean, ntype, sigma=None):
     # assert ntype.lower() in ['gaussian', 'gaussian_gray', 'impulse', 'binomial', 'pattern1', 'pattern2', 'pattern3', 'line']
     assert sigma < 1
-
+    img = torch.from_numpy(img)
     img = clean.clone()
     print("img max:", torch.max(img))
 
@@ -151,7 +152,7 @@ def add_noise(clean, ntype, sigma=None):
     else:
         assert 'not support %s' % args.ntype
 
-    return noisy
+    return noisy.numpy()
 
 
 
