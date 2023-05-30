@@ -114,20 +114,17 @@ def add_noise(clean, ntype, sigma=None):
     if 'gaussian' in ntype:
         noisy = clean + np.random.normal(0, sigma, clean.shape)
 
-    elif type_ == "poisson":
+    elif ntype == "poisson":
         noisy = poisson(img)
 
-    elif type_ == "local_val":
+    elif ntype == "local_val":
         noisy = gaussian_localvar(img)
 
-    elif type_ == "s&p":
+    elif ntype == "s&p":
         noisy = salt_pepper(img, amount=0.05, salt_vs_pepper=0.5)
 
-
-    elif type_ == "speckle":
+    elif ntype == "speckle":
         noisy = speckle(img, sigma)
-
-    print("diff:", torch.max(noisy - clean))
 
     elif ntype == 'binomial':
         h, w, c = clean.shape
@@ -159,14 +156,15 @@ def add_noise(clean, ntype, sigma=None):
 
 
 
-
 def test(args, net, test_data_path_set):
     for test_data_path in test_data_path_set:
         data_list = [os.path.join(test_data_path, item) for item in os.listdir(test_data_path) if
                      'jpg' in item or 'png' in item]
 
-        args.noise_types = [["s&p", 0], ["poisson", 0], ["local_val", 0],
-                            ["speckle", 25], ["speckle", 50]]
+        # args.noise_types = [["s&p", 0], ["poisson", 0], ["local_val", 0],
+        #                     ["speckle", 25], ["speckle", 50]]
+        #
+        args.noise_types = [['gaussian', 25], ['gaussian', 50], ['gaussian', 75], ['gaussian', 100]]
 
         for np in args.noise_types:
             noise_type = np[0]
@@ -185,6 +183,7 @@ def test(args, net, test_data_path_set):
                     gt = cv2.imread(item, 0)[..., np.newaxis]
 
                 gt_ = gt.astype(float) / 255.0
+
                 sigma = noise_level / 255. if noise_level > 1 else noise_level
 
                 noisy = add_noise(gt_, args.ntype, sigma=sigma)
@@ -202,8 +201,9 @@ def test(args, net, test_data_path_set):
                 noisy = np.clip(noisy * 255.0 + 0.5, 0, 255).astype(np.uint8)
 
                 # save PSNR
+                print("denoised, gt:", denoised.shape, gt.shape)
                 temp_psnr = compare_psnr(denoised, gt, data_range=255)
-                temp_ssim = compare_ssim(denoised, gt, data_range=255, multichannel=True)
+                temp_ssim = compare_ssim(denoised, gt, data_range=255, channel_axis=0)
 
                 res['psnr'].append(temp_psnr)
                 res['ssim'].append(temp_ssim)
