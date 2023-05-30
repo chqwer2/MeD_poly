@@ -95,6 +95,8 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
             ssim_sum += ssim_value
             count += 1
 
+            print("PSNR: ", psnr_value, "SSIM: ", ssim_value)
+
         # image save
         # if img_save:
         #     # to cpu
