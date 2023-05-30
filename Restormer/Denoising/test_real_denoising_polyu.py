@@ -107,7 +107,7 @@ class PolyU(Dataset):
 
     def get_img_by_index(self, index):
         H_path = self.paths_H[index]
-        L_path = self.paths_L[index]#.replace("/gt", "/noisy")
+        L_path = self.paths_H[index].replace("/gt", "/noisy")
 
         # print("L_path:", L_path)
 

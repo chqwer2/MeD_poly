@@ -140,8 +140,8 @@ class PolyU(RealDataSet):
 
     def _scan(self):
         self.dataset_path = "../../../../data/denoising/PolyU"
-        self.paths_L = glob("../../../../data/denoising/PolyU/gt/*")
-        self.paths_H = glob("../../../../data/denoising/PolyU/noisy/*")
+        self.paths_L = glob("../../../../data/denoising/PolyU/noisy/*")
+        self.paths_H = glob("../../../../data/denoising/PolyU/gt/*")
         self.paths_H.sort()
         self.paths_L.sort()
 
@@ -151,7 +151,7 @@ class PolyU(RealDataSet):
 
     def get_img_by_index(self, index):
         H_path = self.paths_H[index]
-        L_path = self.paths_L[index].replace("/gt", "/noisy")
+        L_path = self.paths_L[index]
 
         img_H = Image.open(H_path)
         img_L = Image.open(L_path)
