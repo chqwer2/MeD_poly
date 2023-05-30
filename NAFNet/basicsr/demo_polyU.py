@@ -118,7 +118,6 @@ def main():
             W_st = W // 256 + 1
             H_st = H // 256 + 1
             pad = 20
-            print(" input_noisy:",  input_noisy.max())
 
             for i in range(W_st):
                 for j in range(H_st):
@@ -135,8 +134,7 @@ def main():
 
             psnr = compare_psnr(output.cpu().numpy()[0], input_GT.cpu().numpy()[0], data_range=1)
             ssim = compare_ssim(output.cpu().numpy()[0], input_GT.cpu().numpy()[0],
-                                data_range=1,
-                                channel_axis=0)
+                                data_range=1, channel_axis=0)
 
             psnr_list.append(psnr)
             ssim_list.append(ssim)
