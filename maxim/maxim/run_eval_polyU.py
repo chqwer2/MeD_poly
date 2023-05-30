@@ -374,6 +374,9 @@ def main(_):
   inp_shape = (3, 256, 256)
 
   FLOPS = 0
+  
+  print(model)
+  
   macs, params = get_model_complexity_info(model, inp_shape, verbose=False, print_per_layer_stat=True)
 
   print(params)
