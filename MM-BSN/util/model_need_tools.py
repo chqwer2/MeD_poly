@@ -156,6 +156,22 @@ def set_module(cfg):
         module['denoiser'] = BSN(cfg['model'])
     else:
         module['denoiser'] = BSN(**cfg['model']['kwargs'])
+
+    from ptflops import get_model_complexity_info
+
+    inp_shape = (3, 256, 256)
+
+    FLOPS = 0
+    macs, params = get_model_complexity_info(module['denoiser'], inp_shape, verbose=False, print_per_layer_stat=True)
+
+    # params = float(params[:-4])
+    # MACs (G) in log scale
+    print(params)
+    macs = float(macs[:-4]) + FLOPS / 10 ** 9
+
+    print('mac', macs, params)
+
+
     return module
 
 def load_checkpoint(module, cfg, checkpoint_path):

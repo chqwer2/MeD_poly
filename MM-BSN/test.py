@@ -187,19 +187,7 @@ if __name__ == '__main__':
     denoiser = set_denoiser(checkpoint_path=cfg['pretrained'], cfg=cfg)
     print("denoiser", denoiser)
 
-    from ptflops import get_model_complexity_info
 
-    inp_shape = (3, 256, 256)
-
-    FLOPS = 0
-    macs, params = get_model_complexity_info(denoiser, inp_shape, verbose=False, print_per_layer_stat=True)
-
-    # params = float(params[:-4])
-    # MACs (G) in log scale
-    print(params)
-    macs = float(macs[:-4]) + FLOPS / 10 ** 9
-
-    print('mac', macs, params)
 
 
 
