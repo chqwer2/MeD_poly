@@ -375,7 +375,7 @@ def main(_):
               self.model = model
               
         def forward(self, img):
-            return model.apply({'params': flax.core.freeze(params)}, img) 
+            return model.apply({'params': flax.core.freeze(params)}, img.numpy()) 
             
   t = test_(model)
   
