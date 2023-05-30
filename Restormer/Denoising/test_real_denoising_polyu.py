@@ -117,7 +117,7 @@ class PolyU(Dataset):
 
         # (npImg_noisy, (2, 0, 1)) / 255)
 
-        print("img_L max:", np.max(img_L))
+        # print("img_L max:", np.max(img_L)) # 255
 
         if np.max(img_H) > 1.1:
             img_H = img_H / 255
@@ -196,13 +196,14 @@ with torch.no_grad():
               "input_noisy", torch.max(input_noisy),
               input_GT.cpu().numpy()[0].shape, output.cpu().numpy()[0].shape)
 
+
         psnr = compare_psnr(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1)
+        o = output.cpu().numpy()[0]
+        i = input_GT.cpu().numpy()[0]
+        print("o.shape", o.shape, "i.shape", i.shape)
 
-        ssim = compare_ssim(output.cpu().numpy()[0],
-                            input_GT.cpu().numpy()[0], data_range=1,
-                            multichannel=True,
-                            channel_axis=0)
+        ssim = compare_ssim(o, i, data_range=1, multichannel=True, channel_axis=0)
 
         psnr_list.append(psnr)
         ssim_list.append(ssim)
