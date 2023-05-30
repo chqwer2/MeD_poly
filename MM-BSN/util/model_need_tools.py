@@ -120,18 +120,19 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
         #     file_manager.save_img_tensor(img_save_path, denoi_name, denoi_img)
         #     # procedure log msg
         #
-        if info:
-            if 'clean' in data:
-                logger.note('[%s] testing... %04d/%04d. PSNR : %.2f dB' % (
-                status, idx, dataloader.__len__(), psnr_value), end='\r')
-            else:
-                logger.note('[%s] testing... %04d/%04d.' % (status, idx, dataloader.__len__()), end='\r')
+
+        if 'clean' in data:
+            logger.note('[%s] testing... %04d/%04d. PSNR : %.2f dB' % (
+            status, idx, dataloader.__len__(), psnr_value), end='\r')
+        else:
+            logger.note('[%s] testing... %04d/%04d.' % (status, idx, dataloader.__len__()), end='\r')
 
         # final log msg
     if count > 0:
         logger.val('[%s] Done! PSNR : %.2f dB, SSIM : %.3f' % (status, psnr_sum / count, ssim_sum / count))
     else:
         logger.val('[%s] Done!' % status)
+
     # return
     if count == 0:
         return None, None
