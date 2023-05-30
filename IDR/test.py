@@ -205,7 +205,7 @@ def test(args, net, test_data_path_set):
                 # save PSNR
                 print("denoised, gt:", denoised.shape, gt.shape)
                 temp_psnr = compare_psnr(denoised, gt, data_range=255)
-                temp_ssim = compare_ssim(denoised, gt, data_range=255, channel_axis=0)
+                temp_ssim = compare_ssim(denoised, gt, data_range=255, channel_axis=-1)
 
                 res['psnr'].append(temp_psnr)
                 res['ssim'].append(temp_ssim)
