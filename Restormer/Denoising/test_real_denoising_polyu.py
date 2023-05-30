@@ -169,7 +169,7 @@ with torch.no_grad():
         input_GT = input_GT.cuda()
 
         (B, C, W, H) = input_noisy.shape
-        print("input_noisy.shape:", input_noisy.shape)
+        # print("input_noisy.shape:", input_noisy.shape)
 
         output = torch.zeros_like(input_noisy).to(device)
 
@@ -183,7 +183,7 @@ with torch.no_grad():
 
                 # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
                 noisy_patch = input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
-                print("noisy_patch :", noisy_patch.shape)
+                # print("noisy_patch :", noisy_patch.shape)
 
                 clean = model_restoration(noisy_patch)
 
@@ -193,7 +193,7 @@ with torch.no_grad():
 
 
         print("Max: output", torch.max(output), "input_GT", torch.max(input_GT),
-              "input_noisy", torch.max(input_noisy))
+              "input_noisy", torch.max(input_noisy), input_GT.shape, output.shape)
 
         psnr = compare_psnr(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1)
