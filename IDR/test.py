@@ -108,8 +108,8 @@ def speckle(img, sigma):
 def add_noise(clean, ntype, sigma=None):
     # assert ntype.lower() in ['gaussian', 'gaussian_gray', 'impulse', 'binomial', 'pattern1', 'pattern2', 'pattern3', 'line']
     assert sigma < 1
-    img = torch.from_numpy(clean)
-    img = img.clone()
+    img1 = torch.from_numpy(clean)
+    img = img1.clone()
     print("img max:", torch.max(img))
 
     if 'gaussian' in ntype:
@@ -152,7 +152,7 @@ def add_noise(clean, ntype, sigma=None):
     else:
         assert 'not support %s' % args.ntype
 
-    return noisy.numpy()
+    return noisy
 
 
 
