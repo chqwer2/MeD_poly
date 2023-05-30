@@ -110,7 +110,6 @@ def add_noise(clean, ntype, sigma=None):
     assert sigma < 1
     img1 = torch.from_numpy(clean)
     img = img1.clone()
-    print("img max:", torch.max(img))
 
     if ntype == "gaussian":
         print("gaussian")
@@ -197,18 +196,22 @@ def test(args, net, test_data_path_set):
                 denoised = model_forward(net, noisy)
 
                 denoised = denoised + (0.5 if args.zero_mean else 0)
-                denoised = np.clip(denoised * 255.0 + 0.5, 0, 255).astype(np.uint8)
+                denoised = np.clip(denoised * 255.0 , 0, 255).astype(np.uint8)  # + 0.5
 
                 noisy = noisy + (0.5 if args.zero_mean else 0)
-                noisy = np.clip(noisy * 255.0 + 0.5, 0, 255).astype(np.uint8)
+                noisy = np.clip(noisy * 255.0, 0, 255).astype(np.uint8)
 
                 # save PSNR
                 # print("denoised, gt:", denoised.shape, gt.shape)
                 temp_psnr = compare_psnr(denoised, gt, data_range=255)
                 temp_ssim = compare_ssim(denoised, gt, data_range=255, channel_axis=-1)
 
+                temp_psnr = compare_psnr(noisy, gt, data_range=255)
+                temp_ssim = compare_ssim(noisy, gt, data_range=255, channel_axis=-1)
+
                 res['psnr'].append(temp_psnr)
                 res['ssim'].append(temp_ssim)
+
                 print("psnr:", temp_psnr, " ssim:", temp_ssim)
 
                 if args.save_img:
