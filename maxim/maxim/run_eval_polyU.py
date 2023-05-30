@@ -346,12 +346,12 @@ def main(_):
 
   from glob import glob
 
-  input_filenames = glob("../../../../../data/denoising/PolyU/gt/*")
+  input_filenames = glob("../../../../data/denoising/PolyU/gt/*")
   input_filenames = sorted(input_filenames)
 
   FLAGS.has_target = True
 
-  target_filenames = glob("../../../../../data/denoising/PolyU/noisy/*")
+  target_filenames = glob("../../../../data/denoising/PolyU/noisy/*")
   target_filenames = sorted(target_filenames)
 
 
