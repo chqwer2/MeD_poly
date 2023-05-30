@@ -183,16 +183,16 @@ with torch.no_grad():
 
                 # noisy_patch = padr(input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256])
                 noisy_patch = input_noisy[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256]
-                # print("noisy_patch :", noisy_patch.shape)
 
                 clean = model_restoration(noisy_patch)
 
 
                 output[:, :, i * 256:(i + 1) * 256, j * 256:(j + 1) * 256] = clean
 
-
-        psnr = compare_psnr(output.cpu().numpy()[0],
-                            input_GT.cpu().numpy()[0], data_range=1)
+        n_psnr = compare_psnr(input_noisy.cpu().numpy()[0] * 255,
+                            input_GT.cpu().numpy()[0] * 255, data_range=255)
+        psnr = compare_psnr(output.cpu().numpy()[0] * 255,
+                            input_GT.cpu().numpy()[0] * 255, data_range=255)
         o = output.cpu().numpy()[0]
         i = input_GT.cpu().numpy()[0]
         # print("o.shape", o.shape, "i.shape", i.shape)
@@ -204,6 +204,7 @@ with torch.no_grad():
 
 
         print('PSNR: ', psnr, 'SSIM: ', ssim)
+        print('PSNR noisy: ', n_psnr)
 
 print("AVG PolyU PSNR: ", np.mean(psnr_list), ", SSIM: ", np.mean(ssim_list))
 
