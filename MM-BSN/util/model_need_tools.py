@@ -143,6 +143,7 @@ def set_denoiser(checkpoint_path, cfg):
         model = {key: nn.DataParallel(module[key]).cpu() for key in module}
     else:
         model = {key: nn.DataParallel(module[key]).cuda() for key in module}
+
     if hasattr(model['denoiser'].module, 'denoise'):
         denoiser = model['denoiser'].module.denoise
     else:
