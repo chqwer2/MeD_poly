@@ -381,7 +381,7 @@ def main(_):
   
   from ptflops import get_model_complexity_info
 
-  inp_shape = (3, 256, 256)
+  inp_shape = (256, 256, 3)
 
   FLOPS = 0
   
