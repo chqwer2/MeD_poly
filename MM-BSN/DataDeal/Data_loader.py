@@ -181,7 +181,7 @@ class PolyU(RealDataSet):
         img_H, img_L = self.get_img_by_index(data_idx)
 
         clean_img = torch.from_numpy(img_H.astype(np.float32))
-        noisy_img = torch.from_numpy(img_H.astype(np.float32))
+        noisy_img = torch.from_numpy(img_L.astype(np.float32))
 
         return {'clean': clean_img, 'real_noisy': noisy_img }
 
