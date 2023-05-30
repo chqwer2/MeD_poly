@@ -113,6 +113,7 @@ def add_noise(clean, ntype, sigma=None):
     print("img max:", torch.max(img))
 
     if ntype == "gaussian":
+        print("gaussian")
         noisy = clean + np.random.normal(0, sigma, clean.shape)
 
     elif ntype == "poisson":
@@ -167,9 +168,9 @@ def test(args, net, test_data_path_set):
         #
         args.noise_types = [['gaussian', 25], ['gaussian', 50], ['gaussian', 75], ['gaussian', 100]]
 
-        for np in args.noise_types:
-            noise_type = np[0]
-            noise_level = np[1]
+        for np1 in args.noise_types:
+            noise_type = np1[0]
+            noise_level = np1[1]
 
             # for noise_level in args.test_noise_levels:
             if args.save_img:
