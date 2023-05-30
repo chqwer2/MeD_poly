@@ -193,7 +193,8 @@ with torch.no_grad():
 
 
         print("Max: output", torch.max(output), "input_GT", torch.max(input_GT),
-              "input_noisy", torch.max(input_noisy), input_GT.shape, output.shape)
+              "input_noisy", torch.max(input_noisy),
+              input_GT.cpu().numpy()[0].shape, output.cpu().numpy()[0].shape)
 
         psnr = compare_psnr(output.cpu().numpy()[0],
                             input_GT.cpu().numpy()[0], data_range=1)
