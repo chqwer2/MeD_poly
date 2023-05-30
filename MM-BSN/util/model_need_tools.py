@@ -55,7 +55,7 @@ def test_dataloader_process(denoiser, dataloader, file_manager, cfg, add_con=0.,
                 data[key] = data[key].cuda()
 
         # forward
-        print("data[arg] for arg in cfg['model_input']:", [data[arg] for arg in cfg['model_input']])
+        print("data[arg] for arg in cfg['model_input']:", [arg for arg in cfg['model_input']])
 
         input_data = [data[arg] for arg in cfg['model_input']]
 
