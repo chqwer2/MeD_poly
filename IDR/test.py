@@ -112,7 +112,10 @@ def add_noise(clean, ntype, sigma=None):
     img = img1.clone()
 
     if ntype == "gaussian":
+
         noisy = clean + np.random.normal(0, sigma, clean.shape)
+        print("gaussian sigma:", sigma)
+
 
     elif ntype == "poisson":
         noisy = poisson(img)
@@ -158,6 +161,7 @@ def add_noise(clean, ntype, sigma=None):
 
 def test(args, net, test_data_path_set):
     for test_data_path in test_data_path_set:
+
         data_list = [os.path.join(test_data_path, item) for item in os.listdir(test_data_path) if
                      'jpg' in item or 'png' in item]
 
@@ -180,6 +184,8 @@ def test(args, net, test_data_path_set):
             res = {'psnr': [], 'ssim': []}
             for idx, item in enumerate(data_list):
                 gt = cv2.imread(item)
+                print("gt list:", item, gt.shape)
+
                 if 'gray' in args.ntype:
                     gt = cv2.imread(item, 0)[..., np.newaxis]
 
@@ -214,12 +220,14 @@ def test(args, net, test_data_path_set):
 
                 # print("psnr:", temp_psnr, " ssim:", temp_ssim)
 
-                if args.save_img:
-                    filename = item.split('/')[-1].split('.')[0] + '_%s' % args.ntype
+                # if args.save_img:
+                filename = item.split('/')[-1].split('.')[0] + '_%s' % args.ntype
 
-                    cv2.imwrite(os.path.join(save_dir, '%s_%.2f_out.png' % (filename, temp_psnr)), denoised)
-                    cv2.imwrite(os.path.join(save_dir, '%s_NOISY.png' % (filename)), noisy)
-                    cv2.imwrite(os.path.join(save_dir, '%s_GT.png' % (filename)), gt)
+                cv2.imwrite(os.path.join(save_dir, '%s_%.2f_out.png' % (filename, temp_psnr)), denoised)
+                cv2.imwrite(os.path.join(save_dir, '%s_NOISY.png' % (filename)), noisy)
+                cv2.imwrite(os.path.join(save_dir, '%s_GT.png' % (filename)), gt)
+                print("save_dir:",
+                      os.path.join(save_dir, '%s_%.2f_out.png' % (filename, temp_psnr))
 
             print('\r', '\n\nnoise type:', noise_type, 'noise lelvel', noise_level, test_data_path.split('/')[-1], len(data_list),
                   ', psnr  %.2f ssim %.4f' % (np.mean(res['psnr']), np.mean(res['ssim'])), args.ntype)
