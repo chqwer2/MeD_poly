@@ -112,7 +112,6 @@ def add_noise(clean, ntype, sigma=None):
     img = img1.clone()
 
     if ntype == "gaussian":
-        print("gaussian")
         noisy = clean + np.random.normal(0, sigma, clean.shape)
 
     elif ntype == "poisson":
@@ -165,7 +164,8 @@ def test(args, net, test_data_path_set):
         # args.noise_types = [["s&p", 0], ["poisson", 0], ["local_val", 0],
         #                     ["speckle", 25], ["speckle", 50]]
         #
-        args.noise_types = [['gaussian', 25], ['gaussian', 50], ['gaussian', 75], ['gaussian', 100]]
+        args.noise_types = [['gaussian', 15], ['gaussian', 25], ['gaussian', 50],
+                            ['gaussian', 75], ['gaussian', 100]]
 
         for np1 in args.noise_types:
             noise_type = np1[0]
