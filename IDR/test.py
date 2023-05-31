@@ -227,7 +227,7 @@ def test(args, net, test_data_path_set):
                 cv2.imwrite(os.path.join(save_dir, '%s_NOISY.png' % (filename)), noisy)
                 cv2.imwrite(os.path.join(save_dir, '%s_GT.png' % (filename)), gt)
                 print("save_dir:",
-                      os.path.join(save_dir, '%s_%.2f_out.png' % (filename, temp_psnr))
+                      os.path.join(save_dir, '%s_%.2f_out.png' % (filename, temp_psnr)))
 
             print('\r', '\n\nnoise type:', noise_type, 'noise lelvel', noise_level, test_data_path.split('/')[-1], len(data_list),
                   ', psnr  %.2f ssim %.4f' % (np.mean(res['psnr']), np.mean(res['ssim'])), args.ntype)
