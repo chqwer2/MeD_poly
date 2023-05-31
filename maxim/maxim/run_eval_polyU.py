@@ -368,6 +368,33 @@ def main(_):
   model_configs.variant = _MODEL_VARIANT_DICT[FLAGS.task]
   model = model_mod.Model(**model_configs)
 
+  from torch import nn
+  class test_(nn.Module):
+        def __init__(self, model) -> None:
+              super().__init__()
+              self.model = model
+              
+        def forward(self, img):
+            return model.apply({'params': flax.core.freeze(params)}, img.numpy()) 
+            
+  t = test_(model)
+  
+  from ptflops import get_model_complexity_info
+
+  inp_shape = (256, 256, 3)
+
+  FLOPS = 0
+  
+  print(model)
+  
+  macs, paramss = get_model_complexity_info(t, inp_shape, verbose=False, print_per_layer_stat=True)
+
+  print(paramss)
+  macs = float(macs[:-4]) + FLOPS / 10 ** 9
+
+  print('mac', macs, paramss)
+    
+    
   psnr_all = []
   ssim_all = []
 
@@ -398,6 +425,7 @@ def main(_):
 
     # handle multi-stage outputs, obtain the last scale output of last stage
     preds = model.apply({'params': flax.core.freeze(params)}, input_img)
+    
     if isinstance(preds, list):
       preds = preds[-1]
       if isinstance(preds, list):
